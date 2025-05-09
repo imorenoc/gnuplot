@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-12-09 Mon 17:01 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gnuplot</title>
+<meta name="author" content="Isaías Moreno-Cruz" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="/home/isaias/Documents/css/Rethink/rethink.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Gnuplot</h1>
+
+<div id="outline-container-org3af7b57" class="outline-2">
+<h2 id="org3af7b57">Introducción</h2>
+<div class="outline-text-2" id="text-org3af7b57">
+<p>
+<a href="http://www.gnuplot.info/">Gnuplot</a> es un programa de línea de comandos que te permite realizar gráficas de una calidad impecable, las cuales tienen la calidad necesaria para ser publicadas en cualquier tipo de revista. Aunque Gnuplot pudiera parecer un programa complicado al inicio, es todo lo contrario, un programa muy amigable con la configuración correcta.
+</p>
+
+<p>
+En general Gnuplot te permite graficar un conjunto de datos 
+</p>
+
+<p>
+Es un curso para usuarios de linux.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org026a757" class="outline-2">
+<h2 id="org026a757">Instalación</h2>
+<div class="outline-text-2" id="text-org026a757">
+<p>
+Para instalar Gnuplot desde la linea de comandos:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #8e908c;">## </span><span style="color: #8e908c;">Debbian/Ubuntu</span>
+sudo apt-get install gnuplot
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #8e908c;">## </span><span style="color: #8e908c;">Archlinux</span>
+sudo pacman -S gnuplot  
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orgca58f6b" class="outline-3">
+<h3 id="orgca58f6b">Ejecución</h3>
+<div class="outline-text-3" id="text-orgca58f6b">
+<div class="org-src-container">
+<pre class="src src-sh">archlinux&#10140;   &#5125;  gnuplot
+
+        G N U P L O T
+        Version 6.0 patchlevel 1    last modified 2024-05-13 
+
+        Copyright (C) 1986-1993, 1998, 2004, 2007-2024
+        Thomas Williams, Colin Kelley and many others
+
+        gnuplot home:     http://www.gnuplot.info
+        faq, bugs, etc:   type <span style="color: #718c00;">"help FAQ"</span>
+        immediate help:   type <span style="color: #718c00;">"help"</span>  (plot window: hit <span style="color: #718c00;">'h'</span>)
+
+        Terminal type is now qt
+gnuplot&gt; 
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-orgd0ad81b" class="outline-2">
+<h2 id="orgd0ad81b">Primera gráfica</h2>
+<div class="outline-text-2" id="text-orgd0ad81b">
+<p>
+Para iniciar vamos a utilizar los datos de un archivo llamado "junio.dat", es un archivo separados por <i>tabs</i>, que tiene dos columnas: cenit, acimut.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">head ./data/junio.dat
+</pre>
+</div>
+
+<pre class="example" id="org8c58109">
+cenit	acimut
+66.5503	-104.795100
+66.3393	-104.698000
+65.2827	-104.213800
+64.2238	-103.731600
+63.1626	-103.251000
+62.0992	-102.771700
+61.0337	-102.293500
+59.9662	-101.816000
+58.8967	-101.338900
+</pre>
+
+<p>
+Para graficar el archivo en gnuplot únicamente escribimos, previamente hay que ejecutar <code>gnuplot</code>, el siguiente comando: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:1 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>
+</pre>
+</div>
+
+
+<div id="org56e32b1" class="figure">
+<p><img src="./fig/primera.png" alt="primera.png" />
+</p>
+</div>
+
+<p>
+Después de <code>plot</code> se indica entre comillas el nombre del archivo o la ruta, en este caso <code>"./data/junio.dat"</code> , seguido se indica las columnas que se utilizarán para realizar la gráfica <code>using 2:1</code> 2 para el eje de las abscisas y 1 para el eje de las ordenadas. Por último se indica como se dibujaran los puntos, en este caso con una linea <code>with lines</code>.
+</p>
+</div>
+
+<div id="outline-container-org53bdcba" class="outline-3">
+<h3 id="org53bdcba">Titulos y etiquetas</h3>
+<div class="outline-text-3" id="text-org53bdcba">
+<p>
+Habiamos graficado la columna dos () Vs la uno
+</p>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'gamma'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'alpha'</span>
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
+<span style="color: #f5871f;">set</span> grid
+<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
+</pre>
+</div>
+
+
+<div id="org70bba95" class="figure">
+<p><img src="./fig/primera2.png" alt="primera2.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc0d2312" class="outline-3">
+<h3 id="orgc0d2312">PNG</h3>
+<div class="outline-text-3" id="text-orgc0d2312">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">set</span> terminal png size 600,500 enhanced <span style="color: #718c00;">"Helvetica,20"</span>
+<span style="color: #f5871f;">set</span> output <span style="color: #718c00;">'./fig/junio.png'</span>
+<span style="color: #f5871f;">replot</span>
+</pre>
+</div>
+
+<p>
+Ahora tenemos una gráfica en un archivo png que no tiene la calidad que nosotros deseamos, por lo que en lugar de exportarlo en <i>png</i>, vamos a exportarlo en formato <i>tex</i> de <i>LaTeX</i>. Pero antes vamos a hablar de los script de gnuplo.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org91d078f" class="outline-2">
+<h2 id="org91d078f">Script de Gnuplot</h2>
+<div class="outline-text-2" id="text-org91d078f">
+<p>
+Escribir directamente en la terminal es tedioso, así que podemos escribir en un archivo de texto plano, en nuestro editor de confianza (en mi caso emacs) y posteriormente los ejecutamos en gnuplot.
+</p>
+
+<p>
+Scritp  de Gnuplot. Las extensiones que puede tener el archivo son <i>.gnuplot</i> o <i>.gp</i>. En mi caso utilizo una extensión <i>gp</i> para identificar los script de gnuplot.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma$'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'$\alpha$'</span>
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
+<span style="color: #f5871f;">set</span> grid
+<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
+</pre>
+</div>
+
+
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">load</span> <span style="color: #718c00;">'./gp/junio.gp'</span>
+</pre>
+</div>
+
+
+<div id="org5b4f2e4" class="figure">
+<p><img src="./fig/junioS.png" alt="junioS.png" />
+</p>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgbc7df19" class="outline-3">
+<h3 id="orgbc7df19">LaTeX</h3>
+<div class="outline-text-3" id="text-orgbc7df19">
+<p>
+Ahora que tenemos un archivo <i>.gp</i> 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma$'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'$\alpha$'</span>
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
+<span style="color: #f5871f;">set</span> grid
+
+<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
+
+<span style="color: #f5871f;">set</span> terminal epsl col sol lw2
+<span style="color: #f5871f;">set</span> output <span style="color: #718c00;">'./fig/junio.tex'</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">replot</span>
+</pre>
+</div>
+
+<p>
+Ahora tenemos un archivo <i>tex</i> con la gráfica. Esta información ya es posible agregar a un documento de LaTeX, para que nosotros puedamos visualizarla vamos a escribir un prqueño texto de latex que nos permita obtener nuestra gráfica en un pdf.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-latex"><span style="color: #8959a8;">\documentclass</span>{<span style="color: #4271ae;">article</span>}
+<span style="color: #8959a8;">\usepackage</span>{<span style="color: #4271ae;">graphicx</span>}
+<span style="color: #8959a8;">\usepackage</span>{<span style="color: #4271ae;">color</span>}
+<span style="color: #8959a8;">\usepackage</span>{<span style="color: #4271ae;">amsmath</span>}
+<span style="color: #8959a8;">\usepackage</span>{<span style="color: #4271ae;">amssymb</span>}
+<span style="color: #8959a8;">\usepackage</span>{<span style="color: #4271ae;">xcolor</span>}
+<span style="color: #8959a8;">\usepackage</span>[<span style="color: #c82829;">activeacute, spanish</span>]{<span style="color: #4271ae;">babel</span>}
+<span style="color: #8959a8;">\usepackage</span>[<span style="color: #c82829;">utf8x</span>]{<span style="color: #4271ae;">inputenc</span>}
+<span style="color: #8959a8;">\usepackage</span>[<span style="color: #c82829;">T1</span>]{<span style="color: #4271ae;">fontenc</span>}
+
+<span style="color: #696969;">\definecolor</span>{mWhite}{rgb}{1.0, 1.0, 1.0}
+<span style="color: #8959a8;">\newcommand</span><span style="color: #4271ae;">\white</span>[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">\textcolor</span><span style="color: #4271ae;">{mWhite}{#1}</span>}
+<span style="color: #696969;">\spanishdecimal</span>{.}
+<span style="color: #8959a8;">\renewcommand</span>{<span style="color: #4271ae;">\v</span>}[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">{</span><span style="color: #4271ae;">\</span><span style="color: #4271ae;">boldsymbol</span><span style="color: #4271ae;"> #1}</span>}
+<span style="color: #8959a8;">\newcommand</span>{<span style="color: #4271ae;">\PROM</span>}[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">\left\langle</span><span style="color: #4271ae;"> #1</span><span style="color: #4271ae;">\right\rangle</span>}
+<span style="color: #8959a8;">\pagestyle</span>{<span style="color: #4271ae;">empty</span>}t
+
+<span style="color: #8959a8;">\begin</span>{<span style="color: #4271ae;">document</span>}
+<span style="color: #8959a8;">\input</span>{<span style="color: #f5871f;">junio.tex</span>}
+<span style="color: #8959a8;">\end</span>{<span style="color: #4271ae;">document</span>}  
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org512d7b9" class="outline-2">
+<h2 id="org512d7b9">Script gp2pdf</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Isaías Moreno-Cruz</p>
+<p class="date">Created: 2024-12-09 Mon 17:01</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

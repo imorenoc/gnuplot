@@ -1,0 +1,6 @@
+set datafile separator ','
+data='iris.csv'
+m=4
+names="SepalL SepalW PetalL PetalW Series"
+
+

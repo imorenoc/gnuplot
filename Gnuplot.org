@@ -1,0 +1,274 @@
+#+title: Gnuplot
+#+author: Isaías Moreno-Cruz
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/home/isaias/Documents/css/Rethink/rethink.css" />
+#+OPTIONS: toc:nil num:nil html-style:nil
+
+* Introducción
+
+[[http://www.gnuplot.info/][Gnuplot]] es un programa de línea de comandos que te permite realizar gráficas de una calidad impecable, las cuales tienen la calidad necesaria para ser publicadas en cualquier tipo de revista. Aunque Gnuplot pudiera parecer un programa complicado al inicio, es todo lo contrario, un programa muy amigable con la configuración correcta.
+
+En general Gnuplot te permite graficar un conjunto de datos 
+
+Es un curso para usuarios de linux.
+
+* Instalación
+
+Para instalar Gnuplot desde la linea de comandos:
+
+#+begin_src sh :exports both
+## Debbian/Ubuntu
+sudo apt-get install gnuplot
+#+end_src
+
+#+begin_src sh :exports both
+## Archlinux
+sudo pacman -S gnuplot  
+#+end_src
+
+
+** Ejecución
+
+#+begin_src sh :none :exports both
+archlinux➜   ᐅ  gnuplot
+
+        G N U P L O T
+        Version 6.0 patchlevel 1    last modified 2024-05-13 
+
+        Copyright (C) 1986-1993, 1998, 2004, 2007-2024
+        Thomas Williams, Colin Kelley and many others
+
+        gnuplot home:     http://www.gnuplot.info
+        faq, bugs, etc:   type "help FAQ"
+        immediate help:   type "help"  (plot window: hit 'h')
+
+        Terminal type is now qt
+gnuplot> 
+#+end_src
+
+
+
+
+
+* Primera gráfica
+
+Para iniciar vamos a utilizar los datos de un archivo llamado "junio.dat", es un archivo separados por /tabs/, que tiene dos columnas: cenit, acimut.
+
+#+begin_src shell :results output :exports both
+  head ./data/junio.dat
+#+end_src
+
+#+RESULTS:
+#+begin_example
+cenit	acimut
+66.5503	-104.795100
+66.3393	-104.698000
+65.2827	-104.213800
+64.2238	-103.731600
+63.1626	-103.251000
+62.0992	-102.771700
+61.0337	-102.293500
+59.9662	-101.816000
+58.8967	-101.338900
+#+end_example
+
+Para graficar el archivo en gnuplot únicamente escribimos, previamente hay que ejecutar =gnuplot=, el siguiente comando: 
+
+#+begin_src gnuplot :file "./fig/primera.png" :results file graphics :exports both
+  reset
+  file="./data/junio.dat"
+  plot file using 2:1 with lines
+#+end_src
+
+#+RESULTS:
+[[file:./fig/primera.png]]
+
+Después de =plot= se indica entre comillas el nombre del archivo o la ruta, en este caso ="./data/junio.dat"= , seguido se indica las columnas que se utilizarán para realizar la gráfica =using 2:1= 2 para el eje de las abscisas y 1 para el eje de las ordenadas. Por último se indica como se dibujaran los puntos, en este caso con una linea =with lines=.
+
+** Titulos y etiquetas 
+
+Habiamos graficado la columna dos (acimut) Vs la uno (cenit), no es común gráficar el cenit sino su ángulo complementario, $\alpha$ por lo que es necesario hacer una operación sobre la columna dos (90-cenit) lo cual es posible hacer en gnuplot. Adicionalmente también es posible agregar etiquetas a los ejes, así como un titulo.
+
+#+begin_src gnuplot :file "./fig/primera2.png" :results file graphics :exports both :session primera 
+  reset
+  set xlabel 'gamma'
+  set ylabel 'alpha'
+  set yrange [0, 90]
+  set grid
+  file="./data/junio.dat"
+  plot file using 2:(90-$1) with lines title "Junio"
+#+end_src
+
+#+RESULTS:
+[[file:./fig/primera2.png]]
+
+** PNG
+
+La imagen obtenida puede ser guardada en una imagen png, con el siguiente comando:
+
+#+begin_src gnuplot :results none :exports both :session primera 
+  set terminal png size 600,500 enhanced "Helvetica,20"
+  set output './fig/junio.png'
+  replot
+#+end_src
+
+Ahora tenemos una gráfica en un archivo png que no tiene la calidad que nosotros deseamos, por lo que en lugar de exportarlo en /png/, vamos a exportarlo en formato /tex/ de /LaTeX/. Pero antes es necesario  hablar de los script de gnuplo.
+
+* Script de Gnuplot
+
+Escribir directamente en la terminal es tedioso, es mejor utilizar un archivo de texto plano en el cual vamos a escribir todas las lineas de comando antes indicadas. La diferencia es que ahora será posible modificar el archivo según sea nuestro interes. Posteriormente los ejecutamos en gnuplot.
+
+Scritp  de Gnuplot. Las extensiones que puede tener el archivo son /.gnuplot/ o /.gp/. En mi caso utilizo una extensión /gp/ para identificar los script de gnuplot. A continuación se muestra el contenido del archivo =junio.gp=. 
+
+
+#+begin_src gnuplot :results none :exports both  :tangle junio.gp
+  reset
+  set xlabel '$\gamma$'
+  set ylabel '$\alpha$'
+  set yrange [0:90]
+  set grid
+  file="./data/junio.dat"
+  plot file using 2:(90-$1) with lines title "Junio"
+#+end_src
+
+Ahora podemos entrar a /gnuplot/ y leer el script con el siguiente comando:
+
+#+begin_src gnuplot :file "./fig/junioS.png" :results file graphics :exports both
+load 'junio.gp'
+#+end_src
+
+#+RESULTS:
+[[file:./fig/junioS.png]]
+
+
+
+** LaTeX
+
+En lugar de exportar la gráfica a un archivo png es posible exportarlo a un archivo LaTeX. A continuación vamos a gráficar 
+
+#+begin_src gnuplot :results none :exports both
+  load 'junio.gp'
+  set terminal epsl col sol lw 2
+  set output 'junio.tex'
+  replot
+#+end_src
+
+Ahora tenemos un archivo /junio.eps/ y un archivo /junio.tex/, para obtener la grafica deseada es necesario crear un pequeño archivo de latex que nos permita compilar ...
+
+
+Ahora tenemos un archivo /tex/ con la gráfica. Esta información ya es posible agregar a un documento de LaTeX, para que nosotros puedamos visualizarla vamos a escribir un prqueño texto de latex que nos permita obtener nuestra gráfica en un pdf.
+
+
+#+begin_src latex :results none :tangle fig.tex
+  \documentclass{article}
+  \usepackage{graphicx}
+  \usepackage{color}
+  \usepackage{amsmath}
+  \usepackage{amssymb}
+  \usepackage{xcolor}
+  \usepackage[activeacute, spanish]{babel}
+  \usepackage[utf8x]{inputenc}
+  \usepackage[T1]{fontenc}
+
+  \definecolor{mWhite}{rgb}{1.0, 1.0, 1.0}
+  \newcommand\white[1]{\textcolor{mWhite}{#1}}
+  \spanishdecimal{.}
+  \renewcommand{\v}[1]{{\boldsymbol #1}}
+  \newcommand{\PROM}[1]{\left\langle #1\right\rangle}
+  \pagestyle{empty}
+  
+  \begin{document}
+  \input{junio.tex}
+  \end{document}  
+#+end_src
+
+* Script gp2pdf
+
+#+begin_src shell :tangle gp2pdf.sh
+  #!/bin/bash
+#--------------------------------------------------------------------
+# SCRIPT: 	GP2PDF.SH
+# AUTHOR: 	ISAIAS MORENO
+# DATE: 	28-Mar-2013
+# REV:		2.0
+# 
+# PLATFORM: Linux
+## 
+#--------------------------------------------------------------------
+name=`basename $1`
+name=${name%.gp}
+
+# Ejecuta comandos en Gnuplot
+echo "load '${name}.gp'
+set terminal epsl col sol lw 2
+set output '${name}.tex'
+rep" | gnuplot
+
+# Genera el archivo fig.tex
+echo '\documentclass{article}' > fig.tex
+echo '\usepackage[activeacute, spanish]{babel}' >> fig.tex
+echo '\usepackage[utf8x]{inputenc}' >> fig.tex
+echo '\usepackage[T1]{fontenc}' >> fig.tex
+echo '\usepackage{graphicx}' >> fig.tex
+echo '\usepackage{color}' >> fig.tex
+echo '\usepackage{amsmath}' >> fig.tex
+echo '\usepackage{amssymb}' >> fig.tex
+echo '\usepackage{xcolor}' >> fig.tex
+echo '' >> fig.tex
+echo '\definecolor{mWhite}{rgb}{1.0, 1.0, 1.0}' >> fig.tex
+echo '\newcommand\white[1]{\textcolor{mWhite}{#1}}' >> fig.tex
+echo '\renewcommand{\v}[1]{{\boldsymbol #1}}'  >> fig.tex
+echo '\spanishdecimal{.}' >> fig.tex
+echo '\newcommand{\PROM}[1]{\left\langle #1\right\rangle}' >> fig.tex
+echo '\pagestyle{empty}' >> fig.tex
+echo '' >> fig.tex
+echo '\begin{document}' >> fig.tex
+echo '\input{'$name'.tex}' >> fig.tex
+echo '' >> fig.tex
+echo '\end{document}' >> fig.tex
+
+## Latex to Pdf
+latex fig
+dvips -E fig.dvi -o fig.eps
+epstopdf fig.eps -o "$name".pdf
+rm "$name".eps
+
+## Recorte del pdf
+pdfcrop --margins "10 10 10 0" "$name".pdf
+mv "$name"-crop.pdf "$name".pdf
+
+rm "$name".tex
+rm fig.aux fig.dvi fig.tex fig.log
+rm fig.pdf fig.eps
+##okular "$name".pdf &
+#######################################################################
+#+end_src
+
+
+Agregar permiso de ejecucuón al archivo =gp2pdf.sh=
+
+#+begin_src shell
+  chmod +x gp2pdf.sh
+#+end_src
+
+Usar el archivo =gp2pdf.sh=
+
+#+begin_src shell :results none
+  ./gp2pdf.sh junio.gp
+#+end_src
+
+
+** Agregar el script gp2pdf al $PATH
+
+Un script del shell puede agregarse a la variable =$PATH=
+
+#+begin_src shell
+export PATH=$PATH:/home/isaias/Documents/script  
+#+end_src
+
+Ahora podemos hacer uso del script =gp2pdf= desde cualquier carpeta.
+
+* Editor de texto
+
+
+
+
