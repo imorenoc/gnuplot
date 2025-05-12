@@ -3,21 +3,52 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-12-09 Mon 17:01 -->
+<!-- 2025-05-12 Mon 15:14 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gnuplot</title>
 <meta name="author" content="Isaías Moreno-Cruz" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="/home/isaias/Documents/css/Rethink/rethink.css" />
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">Gnuplot</h1>
-
-<div id="outline-container-org3af7b57" class="outline-2">
-<h2 id="org3af7b57">Introducción</h2>
-<div class="outline-text-2" id="text-org3af7b57">
+<div id="outline-container-orgf96f762" class="outline-2">
+<h2 id="orgf96f762">Introducción</h2>
+<div class="outline-text-2" id="text-orgf96f762">
 <p>
 <a href="http://www.gnuplot.info/">Gnuplot</a> es un programa de línea de comandos que te permite realizar gráficas de una calidad impecable, las cuales tienen la calidad necesaria para ser publicadas en cualquier tipo de revista. Aunque Gnuplot pudiera parecer un programa complicado al inicio, es todo lo contrario, un programa muy amigable con la configuración correcta.
 </p>
@@ -27,14 +58,13 @@ En general Gnuplot te permite graficar un conjunto de datos
 </p>
 
 <p>
-Es un curso para usuarios de linux.
+Es un curso para usuarios de linux (<a href="https://github.com/imorenoc/gnuplot">Curso de gnuplot</a>)
 </p>
 </div>
 </div>
-
-<div id="outline-container-org026a757" class="outline-2">
-<h2 id="org026a757">Instalación</h2>
-<div class="outline-text-2" id="text-org026a757">
+<div id="outline-container-orgaa61e51" class="outline-2">
+<h2 id="orgaa61e51">Instalación</h2>
+<div class="outline-text-2" id="text-orgaa61e51">
 <p>
 Para instalar Gnuplot desde la linea de comandos:
 </p>
@@ -50,12 +80,24 @@ sudo apt-get install gnuplot
 sudo pacman -S gnuplot  
 </pre>
 </div>
+
+<p>
+Para macOS puede instalar <a href="https://brew.sh/">Homebrew</a> (necesita Xcode), en Windows puede ser una alternativa Windows Subsystem for Linux 2 (WSL2).
+</p>
+
+
+<p>
+También es necesario tener instalado LaTeX
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #8e908c;">## </span><span style="color: #8e908c;">Archlinux</span>
+sudo pacman -S texlive
+</pre>
 </div>
-
-
-<div id="outline-container-orgca58f6b" class="outline-3">
-<h3 id="orgca58f6b">Ejecución</h3>
-<div class="outline-text-3" id="text-orgca58f6b">
+</div>
+<div id="outline-container-orgf096978" class="outline-3">
+<h3 id="orgf096978">Ejecución</h3>
+<div class="outline-text-3" id="text-orgf096978">
 <div class="org-src-container">
 <pre class="src src-sh">archlinux&#10140;   &#5125;  gnuplot
 
@@ -76,14 +118,9 @@ gnuplot&gt;
 </div>
 </div>
 </div>
-
-
-
-
-
-<div id="outline-container-orgd0ad81b" class="outline-2">
-<h2 id="orgd0ad81b">Primera gráfica</h2>
-<div class="outline-text-2" id="text-orgd0ad81b">
+<div id="outline-container-orgc443cdd" class="outline-2">
+<h2 id="orgc443cdd">Primera gráfica</h2>
+<div class="outline-text-2" id="text-orgc443cdd">
 <p>
 Para iniciar vamos a utilizar los datos de un archivo llamado "junio.dat", es un archivo separados por <i>tabs</i>, que tiene dos columnas: cenit, acimut.
 </p>
@@ -93,7 +130,7 @@ Para iniciar vamos a utilizar los datos de un archivo llamado "junio.dat", es un
 </pre>
 </div>
 
-<pre class="example" id="org8c58109">
+<pre class="example" id="org1764ae4">
 cenit	acimut
 66.5503	-104.795100
 66.3393	-104.698000
@@ -111,12 +148,14 @@ Para graficar el archivo en gnuplot únicamente escribimos, previamente hay que 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-gnuplot"><span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:1 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/junio.dat"</span>
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 2:1 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>
 </pre>
 </div>
 
 
-<div id="org56e32b1" class="figure">
+<div id="org078aabf" class="figure">
 <p><img src="./fig/primera.png" alt="primera.png" />
 </p>
 </div>
@@ -125,12 +164,11 @@ Para graficar el archivo en gnuplot únicamente escribimos, previamente hay que 
 Después de <code>plot</code> se indica entre comillas el nombre del archivo o la ruta, en este caso <code>"./data/junio.dat"</code> , seguido se indica las columnas que se utilizarán para realizar la gráfica <code>using 2:1</code> 2 para el eje de las abscisas y 1 para el eje de las ordenadas. Por último se indica como se dibujaran los puntos, en este caso con una linea <code>with lines</code>.
 </p>
 </div>
-
-<div id="outline-container-org53bdcba" class="outline-3">
-<h3 id="org53bdcba">Titulos y etiquetas</h3>
-<div class="outline-text-3" id="text-org53bdcba">
+<div id="outline-container-orgf05b7c2" class="outline-3">
+<h3 id="orgf05b7c2">Titulos y etiquetas</h3>
+<div class="outline-text-3" id="text-orgf05b7c2">
 <p>
-Habiamos graficado la columna dos () Vs la uno
+Habiamos graficado la columna dos (acimut) Vs la uno (cenit), no es común gráficar el cenit sino su ángulo complementario, \(\alpha\) por lo que es necesario hacer una operación sobre la columna dos (90-cenit) lo cual es posible hacer en gnuplot. Adicionalmente también es posible agregar etiquetas a los ejes, así como un titulo.
 </p>
 
 <div class="org-src-container">
@@ -139,21 +177,25 @@ Habiamos graficado la columna dos () Vs la uno
 <span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'alpha'</span>
 <span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
 <span style="color: #f5871f;">set</span> grid
-<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/junio.dat"</span>
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
 </pre>
 </div>
 
 
-<div id="org70bba95" class="figure">
+<div id="org2c21090" class="figure">
 <p><img src="./fig/primera2.png" alt="primera2.png" />
 </p>
 </div>
 </div>
 </div>
+<div id="outline-container-orgbf49ad3" class="outline-3">
+<h3 id="orgbf49ad3">PNG</h3>
+<div class="outline-text-3" id="text-orgbf49ad3">
+<p>
+La imagen obtenida puede ser guardada en una imagen png, con el siguiente comando:
+</p>
 
-<div id="outline-container-orgc0d2312" class="outline-3">
-<h3 id="orgc0d2312">PNG</h3>
-<div class="outline-text-3" id="text-orgc0d2312">
 <div class="org-src-container">
 <pre class="src src-gnuplot"><span style="color: #f5871f;">set</span> terminal png size 600,500 enhanced <span style="color: #718c00;">"Helvetica,20"</span>
 <span style="color: #f5871f;">set</span> output <span style="color: #718c00;">'./fig/junio.png'</span>
@@ -162,70 +204,68 @@ Habiamos graficado la columna dos () Vs la uno
 </div>
 
 <p>
-Ahora tenemos una gráfica en un archivo png que no tiene la calidad que nosotros deseamos, por lo que en lugar de exportarlo en <i>png</i>, vamos a exportarlo en formato <i>tex</i> de <i>LaTeX</i>. Pero antes vamos a hablar de los script de gnuplo.
+Ahora tenemos una gráfica en un archivo png que no tiene la calidad que nosotros deseamos, por lo que en lugar de exportarlo en <i>png</i>, vamos a exportarlo en formato <i>tex</i> de <i>LaTeX</i>. Pero antes es necesario  hablar de los script de gnuplo.
 </p>
 </div>
 </div>
 </div>
-
-<div id="outline-container-org91d078f" class="outline-2">
-<h2 id="org91d078f">Script de Gnuplot</h2>
-<div class="outline-text-2" id="text-org91d078f">
+<div id="outline-container-orgfc473f2" class="outline-2">
+<h2 id="orgfc473f2">Script de Gnuplot</h2>
+<div class="outline-text-2" id="text-orgfc473f2">
 <p>
-Escribir directamente en la terminal es tedioso, así que podemos escribir en un archivo de texto plano, en nuestro editor de confianza (en mi caso emacs) y posteriormente los ejecutamos en gnuplot.
+Escribir directamente en la terminal es tedioso, es mejor utilizar un archivo de texto plano en el cual vamos a escribir todas las lineas de comando antes indicadas. La diferencia es que ahora será posible modificar el archivo según sea nuestro interes. Posteriormente los ejecutamos en gnuplot.
 </p>
 
 <p>
-Scritp  de Gnuplot. Las extensiones que puede tener el archivo son <i>.gnuplot</i> o <i>.gp</i>. En mi caso utilizo una extensión <i>gp</i> para identificar los script de gnuplot.
+Scritp  de Gnuplot. Las extensiones que puede tener el archivo son <i>.gnuplot</i> o <i>.gp</i>. En mi caso utilizo una extensión <i>gp</i> para identificar los script de gnuplot. A continuación se muestra el contenido del archivo <code>junio.gp</code>. 
 </p>
+
 
 <div class="org-src-container">
 <pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
 <span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma$'</span>
 <span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'$\alpha$'</span>
-<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0:90</span>]
 <span style="color: #f5871f;">set</span> grid
-<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/junio.dat"</span>
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
 </pre>
 </div>
 
-
+<p>
+Ahora podemos entrar a <i>gnuplot</i> y leer el script con el siguiente comando:
+</p>
 
 <div class="org-src-container">
-<pre class="src src-gnuplot"><span style="color: #f5871f;">load</span> <span style="color: #718c00;">'./gp/junio.gp'</span>
+<pre class="src src-gnuplot"><span style="color: #f5871f;">load</span> <span style="color: #718c00;">'junio.gp'</span>
 </pre>
 </div>
 
 
-<div id="org5b4f2e4" class="figure">
+<div id="orgefffda2" class="figure">
 <p><img src="./fig/junioS.png" alt="junioS.png" />
 </p>
 </div>
 </div>
-
-
-
-
-<div id="outline-container-orgbc7df19" class="outline-3">
-<h3 id="orgbc7df19">LaTeX</h3>
-<div class="outline-text-3" id="text-orgbc7df19">
+<div id="outline-container-org532f186" class="outline-3">
+<h3 id="org532f186">LaTeX</h3>
+<div class="outline-text-3" id="text-org532f186">
 <p>
-Ahora que tenemos un archivo <i>.gp</i> 
+En lugar de exportar la gráfica a un archivo png es posible exportarlo a un archivo LaTeX. A continuación vamos a gráficar 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-gnuplot"><span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma$'</span>
-<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'$\alpha$'</span>
-<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0, 90</span>]
-<span style="color: #f5871f;">set</span> grid
-
-<span style="color: #8959a8;">plot</span> <span style="color: #718c00;">"./data/junio.dat"</span> <span style="color: #bb9200;">using</span> 2:(90-$1) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"Junio"</span>
-
-<span style="color: #f5871f;">set</span> terminal epsl col sol lw2
-<span style="color: #f5871f;">set</span> output <span style="color: #718c00;">'./fig/junio.tex'</span>
-<span style="color: #8e908c;">#</span><span style="color: #8e908c;">replot</span>
+<pre class="src src-gnuplot"><span style="color: #f5871f;">load</span> <span style="color: #718c00;">'junio.gp'</span>
+<span style="color: #f5871f;">set</span> terminal epsl col sol <span style="color: #bb9200;">lw</span> 2
+<span style="color: #f5871f;">set</span> output <span style="color: #718c00;">'junio.tex'</span>
+<span style="color: #f5871f;">replot</span>
 </pre>
 </div>
+
+<p>
+Ahora tenemos un archivo <i>junio.eps</i> y un archivo <i>junio.tex</i>, para obtener la grafica deseada es necesario crear un pequeño archivo de latex que nos permita compilar &#x2026;
+</p>
+
 
 <p>
 Ahora tenemos un archivo <i>tex</i> con la gráfica. Esta información ya es posible agregar a un documento de LaTeX, para que nosotros puedamos visualizarla vamos a escribir un prqueño texto de latex que nos permita obtener nuestra gráfica en un pdf.
@@ -243,12 +283,12 @@ Ahora tenemos un archivo <i>tex</i> con la gráfica. Esta información ya es pos
 <span style="color: #8959a8;">\usepackage</span>[<span style="color: #c82829;">utf8x</span>]{<span style="color: #4271ae;">inputenc</span>}
 <span style="color: #8959a8;">\usepackage</span>[<span style="color: #c82829;">T1</span>]{<span style="color: #4271ae;">fontenc</span>}
 
-<span style="color: #696969;">\definecolor</span>{mWhite}{rgb}{1.0, 1.0, 1.0}
+<span style="color: #8959a8;">\definecolor</span>{mWhite}{rgb}{1.0, 1.0, 1.0}
 <span style="color: #8959a8;">\newcommand</span><span style="color: #4271ae;">\white</span>[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">\textcolor</span><span style="color: #4271ae;">{mWhite}{#1}</span>}
-<span style="color: #696969;">\spanishdecimal</span>{.}
+<span style="color: #8959a8;">\spanishdecimal</span>{.}
 <span style="color: #8959a8;">\renewcommand</span>{<span style="color: #4271ae;">\v</span>}[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">{</span><span style="color: #4271ae;">\</span><span style="color: #4271ae;">boldsymbol</span><span style="color: #4271ae;"> #1}</span>}
 <span style="color: #8959a8;">\newcommand</span>{<span style="color: #4271ae;">\PROM</span>}[<span style="color: #c82829;">1</span>]{<span style="color: #4271ae;">\left\langle</span><span style="color: #4271ae;"> #1</span><span style="color: #4271ae;">\right\rangle</span>}
-<span style="color: #8959a8;">\pagestyle</span>{<span style="color: #4271ae;">empty</span>}t
+<span style="color: #8959a8;">\pagestyle</span>{<span style="color: #4271ae;">empty</span>}
 
 <span style="color: #8959a8;">\begin</span>{<span style="color: #4271ae;">document</span>}
 <span style="color: #8959a8;">\input</span>{<span style="color: #f5871f;">junio.tex</span>}
@@ -258,17 +298,1186 @@ Ahora tenemos un archivo <i>tex</i> con la gráfica. Esta información ya es pos
 </div>
 </div>
 </div>
+<div id="outline-container-orgc4e2698" class="outline-2">
+<h2 id="orgc4e2698">Script gp2pdf</h2>
+<div class="outline-text-2" id="text-orgc4e2698">
+<div class="org-src-container">
+<pre class="src src-shell">  <span style="color: #8e908c;">#</span><span style="color: #8e908c;">!/bin/bash</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">--------------------------------------------------------------------</span>
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">SCRIPT:       GP2PDF.SH</span>
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">AUTHOR:       ISAIAS MORENO</span>
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">DATE:         28-Mar-2013</span>
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">REV:          2.0</span>
+<span style="color: #8e908c;"># </span>
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">PLATFORM: Linux</span>
+<span style="color: #8e908c;">## </span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">--------------------------------------------------------------------</span>
+<span style="color: #c82829;">name</span>=<span style="color: #4d4d4c; font-weight: bold;">`basename $1`</span>
+<span style="color: #c82829;">name</span>=${<span style="color: #c82829;">name</span>%.gp}
+
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">Ejecuta comandos en Gnuplot</span>
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">"load '${name}.gp'</span>
+<span style="color: #718c00;">set terminal epsl col sol lw 2</span>
+<span style="color: #718c00;">set output '${name}.tex'</span>
+<span style="color: #718c00;">rep"</span> | gnuplot
+
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">Genera el archivo fig.tex</span>
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\documentclass{article}'</span> &gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage[activeacute, spanish]{babel}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage[utf8x]{inputenc}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage[T1]{fontenc}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage{graphicx}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage{color}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage{amsmath}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage{amssymb}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\usepackage{xcolor}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">''</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\definecolor{mWhite}{rgb}{1.0, 1.0, 1.0}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\newcommand\white[1]{\textcolor{mWhite}{#1}}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\renewcommand{\v}[1]{{\boldsymbol #1}}'</span>  &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\spanishdecimal{.}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\newcommand{\PROM}[1]{\left\langle #1\right\rangle}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\pagestyle{empty}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">''</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\begin{document}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\input{'</span>$<span style="color: #c82829;">name</span><span style="color: #718c00;">'.tex}'</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">''</span> &gt;&gt; fig.tex
+<span style="color: #4271ae;">echo</span> <span style="color: #718c00;">'\end{document}'</span> &gt;&gt; fig.tex
+
+<span style="color: #8e908c;">## </span><span style="color: #8e908c;">Latex to Pdf</span>
+latex fig
+dvips -E fig.dvi -o fig.eps
+epstopdf fig.eps -o <span style="color: #718c00;">"$name"</span>.pdf
+rm <span style="color: #718c00;">"$name"</span>.eps
+
+<span style="color: #8e908c;">## </span><span style="color: #8e908c;">Recorte del pdf</span>
+pdfcrop --margins <span style="color: #718c00;">"10 10 10 0"</span> <span style="color: #718c00;">"$name"</span>.pdf
+mv <span style="color: #718c00;">"$name"</span>-crop.pdf <span style="color: #718c00;">"$name"</span>.pdf
+
+rm <span style="color: #718c00;">"$name"</span>.tex
+rm fig.aux fig.dvi fig.tex fig.log
+rm fig.pdf fig.eps
+<span style="color: #8e908c;">##</span><span style="color: #8e908c;">okular "$name".pdf &amp;</span>
+<span style="color: #8e908c;">#######################################################################</span>
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">This</td>
+<td class="org-left">is</td>
+<td class="org-left">pdfTeX,</td>
+<td class="org-left">Version</td>
+<td class="org-left">3.141592653-2.6-1.40.27</td>
+<td class="org-left">(TeX</td>
+<td class="org-left">Live</td>
+<td class="org-left">2026/dev/Arch</td>
+<td class="org-left">Linux)</td>
+<td class="org-left">(preloaded</td>
+<td class="org-left">format=latex)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">restricted</td>
+<td class="org-left">\write18</td>
+<td class="org-left">enabled.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">entering</td>
+<td class="org-left">extended</td>
+<td class="org-left">mode</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">(./fig.tex</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">LaTeX2e</td>
+<td class="org-left"><span class="timestamp-wrapper"><span class="timestamp">&lt;2024-11-01 Fri&gt;</span></span></td>
+<td class="org-left">patch</td>
+<td class="org-left">level</td>
+<td class="org-left">2</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">L3</td>
+<td class="org-left">programming</td>
+<td class="org-left">layer</td>
+<td class="org-left"><span class="timestamp-wrapper"><span class="timestamp">&lt;2025-01-18 Sat&gt;</span></span></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">!</td>
+<td class="org-left">Text</td>
+<td class="org-left">line</td>
+<td class="org-left">contains</td>
+<td class="org-left">an</td>
+<td class="org-left">invalid</td>
+<td class="org-left">character.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">l.2</td>
+<td class="org-left">^^@</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">sepackage[activeacute,</td>
+<td class="org-left">spanish]{babel}</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">?</td>
+<td class="org-left">Type</td>
+<td class="org-left">&lt;return&gt;</td>
+<td class="org-left">to</td>
+<td class="org-left">proceed,</td>
+<td class="org-left">S</td>
+<td class="org-left">to</td>
+<td class="org-left">scroll</td>
+<td class="org-left">future</td>
+<td class="org-left">error</td>
+<td class="org-left">messages,</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">R</td>
+<td class="org-left">to</td>
+<td class="org-left">run</td>
+<td class="org-left">without</td>
+<td class="org-left">stopping,</td>
+<td class="org-left">Q</td>
+<td class="org-left">to</td>
+<td class="org-left">run</td>
+<td class="org-left">quietly,</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">I</td>
+<td class="org-left">to</td>
+<td class="org-left">insert</td>
+<td class="org-left">something,</td>
+<td class="org-left">E</td>
+<td class="org-left">to</td>
+<td class="org-left">edit</td>
+<td class="org-left">your</td>
+<td class="org-left">file,</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">H</td>
+<td class="org-left">for</td>
+<td class="org-left">help,</td>
+<td class="org-left">X</td>
+<td class="org-left">to</td>
+<td class="org-left">quit.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">?</td>
+<td class="org-left">[Using</td>
+<td class="org-left">open</td>
+<td class="org-left">mode]</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Open</td>
+<td class="org-left">and</td>
+<td class="org-left">visual</td>
+<td class="org-left">must</td>
+<td class="org-left">be</td>
+<td class="org-left">used</td>
+<td class="org-left">interactively</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">No</td>
+<td class="org-left">pages</td>
+<td class="org-left">of</td>
+<td class="org-left">output.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Transcript</td>
+<td class="org-left">written</td>
+<td class="org-left">on</td>
+<td class="org-left">fig.log.</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">PDFCROP</td>
+<td class="org-left">1.42,</td>
+<td class="org-left">2023/04/15</td>
+<td class="org-left">-</td>
+<td class="org-left">Copyright</td>
+<td class="org-left">(c)</td>
+<td class="org-left">2002-2023</td>
+<td class="org-left">by</td>
+<td class="org-left">Heiko</td>
+<td class="org-left">Oberdiek,</td>
+<td class="org-left">Oberdiek</td>
+<td class="org-left">Package</td>
+<td class="org-left">Support</td>
+<td class="org-left">Group.</td>
+</tr>
+</tbody>
+</table>
 
 
-<div id="outline-container-org512d7b9" class="outline-2">
-<h2 id="org512d7b9">Script gp2pdf</h2>
+<p>
+Agregar permiso de ejecucuón al archivo <code>gp2pdf.sh</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">chmod +x gp2pdf.sh
+</pre>
+</div>
+
+<p>
+Usar el archivo <code>gp2pdf.sh</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">./gp2pdf.sh junio.gp
+</pre>
+</div>
+</div>
+<div id="outline-container-orgbcfffa8" class="outline-3">
+<h3 id="orgbcfffa8">Agregar el script gp2pdf al $PATH</h3>
+<div class="outline-text-3" id="text-orgbcfffa8">
+<p>
+Un script del shell puede agregarse a la variable <code>$PATH</code>, al colocar la sigiente linea de texto en el archivo <code>.bashrc</code>, <code>.zshrc</code> o <code>.profile</code> (macOS).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #4271ae;">export</span> <span style="color: #c82829;">PATH</span>=$<span style="color: #c82829;">PATH</span>:/home/isaias/Documents/script  
+</pre>
+</div>
+
+<p>
+Ahora podemos hacer uso del script <code>gp2pdf</code> desde cualquier carpeta.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgabed0fc" class="outline-2">
+<h2 id="orgabed0fc">Editor de texto</h2>
+<div class="outline-text-2" id="text-orgabed0fc">
+<p>
+El editor de texto que recomiendo es <code>emacs</code>, pero pueden usar con el que se sientan más comodos.
+</p>
+
+<p>
+A partir de ahora, únicamente escribiremos scripts de gnuplot.
+</p>
+</div>
+</div>
+<div id="outline-container-org67a7044" class="outline-2">
+<h2 id="org67a7044">Comandos básicos de Gnuplot</h2>
+<div class="outline-text-2" id="text-org67a7044">
+</div>
+<div id="outline-container-org6e2e918" class="outline-3">
+<h3 id="org6e2e918">Etiquetas esenciales</h3>
+<div class="outline-text-3" id="text-org6e2e918">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'Funci&#243;n sin(x)'</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'Eje X'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Eje y'</span>
+<span style="color: #f5871f;">set</span> grid
+
+<span style="color: #c82829;">f(x) =</span> <span style="color: #4271ae;">sin</span>(x)
+
+<span style="color: #8959a8;">plot</span> [<span style="color: #f5871f;">0:2*pi</span>] f(x)
+</pre>
+</div>
+
+
+<div id="orgeed30ce" class="figure">
+<p><img src="./fig/title.png" alt="title.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb398e10" class="outline-3">
+<h3 id="orgb398e10">Etiquetas en los ejes (xtics/ytics)</h3>
+<div class="outline-text-3" id="text-orgb398e10">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'Funci&#243;n sin(x)'</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'Eje X'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Eje y'</span>
+
+<span style="color: #c82829;">f(x) =</span> <span style="color: #4271ae;">sin</span>(x)
+<span style="color: #f5871f;">set</span> xtics (<span style="color: #718c00;">"pi/2"</span> pi/2, <span style="color: #718c00;">"pi"</span> pi, <span style="color: #718c00;">"3pi/2"</span> 3*pi/2, <span style="color: #718c00;">"2pi"</span> 2*pi)
+<span style="color: #f5871f;">set</span> ytics 0.4
+<span style="color: #f5871f;">set</span> grid
+
+<span style="color: #8959a8;">plot</span> [<span style="color: #f5871f;">0:2*pi</span>] f(x)
+</pre>
+</div>
+
+
+<div id="org7a0bf85" class="figure">
+<p><img src="./fig/xtics.png" alt="xtics.png" />
+</p>
+</div>
+
+<p>
+Es posible remover las etiquetas de los ejes utilizando <code>unset xtics</code> o <code>unset ytics</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-orge61becc" class="outline-3">
+<h3 id="orge61becc">Estilos</h3>
+<div class="outline-text-3" id="text-orge61becc">
+</div>
+<div id="outline-container-org4801026" class="outline-4">
+<h4 id="org4801026">Test</h4>
+<div class="outline-text-4" id="text-org4801026">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">test</span>
+</pre>
+</div>
+
+
+<div id="org9707939" class="figure">
+<p><img src="./fig/test.png" alt="test.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org16e06af" class="outline-4">
+<h4 id="org16e06af">Obtención de datos a partir de una función</h4>
+<div class="outline-text-4" id="text-org16e06af">
+</div>
+</div>
+<div id="outline-container-org592ed6e" class="outline-4">
+<h4 id="org592ed6e">Lineas y puntos</h4>
+<div class="outline-text-4" id="text-org592ed6e">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> key left bottom
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'Eje X'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Eje y'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/funciones.dat'</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">points</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x)"</span>,\
+     file <span style="color: #bb9200;">index</span> 1 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">linespoints</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"cos(x)"</span>
+</pre>
+</div>
+
+
+<div id="org121709b" class="figure">
+<p><img src="./fig/estilos.png" alt="estilos.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orga279a80" class="outline-4">
+<h4 id="orga279a80">pointtype, pointsize, linewidth</h4>
+<div class="outline-text-4" id="text-orga279a80">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> key left bottom
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'Eje X'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Eje y'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/funciones.dat'</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">points</span> <span style="color: #bb9200;">pointtype</span> 6 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x)"</span>,\
+     file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:($2+0.1)  <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">linewidth</span> 4 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x) + pi"</span>,\
+     file <span style="color: #bb9200;">index</span> 1 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">points</span> <span style="color: #bb9200;">pointtype</span> 4 <span style="color: #bb9200;">pointsize</span> 0.1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"cos(x)"</span>
+</pre>
+</div>
+
+
+<div id="orgc4f5d77" class="figure">
+<p><img src="./fig/estilos2.png" alt="estilos2.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org6388472" class="outline-4">
+<h4 id="org6388472">range</h4>
+<div class="outline-text-4" id="text-org6388472">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set key left bottom</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'y'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'f(x)'</span>
+<span style="color: #f5871f;">set</span> xrange [<span style="color: #f5871f;">1:2</span>]
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">0.6:1.3</span>]
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/funciones.dat'</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">linespoints</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x)"</span>
+</pre>
+</div>
+
+
+<div id="orgf66e188" class="figure">
+<p><img src="./fig/estilos3.png" alt="estilos3.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf0f9ab7" class="outline-4">
+<h4 id="orgf0f9ab7">dashtype</h4>
+<div class="outline-text-4" id="text-orgf0f9ab7">
+<p>
+Es posible definir tu propio patrón usando una cadena con los siguientes caracteres:
+</p>
+
+<ul class="org-ul">
+<li>"-":segmento sólido</li>
+<li>".":punto</li>
+<li>"_":espacio en blanco</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> key left bottom
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'Eje X'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Eje y'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/funciones.dat'</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> dashtype 2  <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x)"</span>,\
+     file <span style="color: #bb9200;">index</span> 1 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> dashtype <span style="color: #718c00;">"-.._"</span>  <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"cos(x)"</span>      
+</pre>
+</div>
+
+
+<div id="org6b3c728" class="figure">
+<p><img src="./fig/estilos4.png" alt="estilos4.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgef787f7" class="outline-4">
+<h4 id="orgef787f7">Formato</h4>
+<div class="outline-text-4" id="text-orgef787f7">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> key left bottom
+
+<span style="color: #f5871f;">set</span> format y <span style="color: #718c00;">"%.1f"</span>
+<span style="color: #f5871f;">set</span> format x <span style="color: #718c00;">"%.1f"</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'x'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'f(x)'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/funciones.dat'</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">index</span> 0 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"sin(x)"</span>,\
+     file <span style="color: #bb9200;">index</span> 1 <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"cos(x)"</span>      
+</pre>
+</div>
+
+
+<div id="org01ee936" class="figure">
+<p><img src="./fig/estilos4.png" alt="estilos4.png" />
+</p>
+</div>
+
+<p>
+Ver <a href="https://gnuplot.sourceforge.net/docs_4.2/node184.html">Format specifiers</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org71664f1" class="outline-4">
+<h4 id="org71664f1">Más estilos</h4>
+<div class="outline-text-4" id="text-org71664f1">
+<ul class="org-ul">
+<li><code>set size square</code>, gráfica cuadrada</li>
+<li><code>set size ratio 1.5</code>, relación de tamaño de los ejes.</li>
+<li><code>unset key</code>, elimina las etiquetas de titulos</li>
+<li><code>set key</code>
+<ul class="org-ul">
+<li>set key left top, mover el titulo a la izquierda (left, right, center) y hacia arriba (top, bottom, center).</li>
+<li>set key out horiz, mover las etiquetas fuera de la caja en horizontal (horiz, vert)</li>
+</ul></li>
+<li><code>unset border</code>, borra los ejes coordenados</li>
+<li><code>set zeroaxis</code>, coloca los ejes coordenados</li>
+<li><code>unset colorbox</code>, borra la caja de colores</li>
+</ul>
+
+
+<p>
+No es necesario
+</p>
+
+<ul class="org-ul">
+<li>w, with</li>
+<li>p, points</li>
+<li>pt, point type</li>
+<li>ps, point size</li>
+<li>lw, line width</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcba12ad" class="outline-2">
+<h2 id="orgcba12ad">Trabajar con fechas</h2>
+<div class="outline-text-2" id="text-orgcba12ad">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+
+<span style="color: #f5871f;">set</span> xdata time
+<span style="color: #f5871f;">set</span> timefmt <span style="color: #718c00;">"%Y-%m-%d"</span>
+<span style="color: #f5871f;">set</span> format x <span style="color: #718c00;">"%b"</span>
+
+<span style="color: #f5871f;">set</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">""</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">"sigma [cm]"</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">""</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/fecha.dat"</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 1:2 w lp <span style="color: #bb9200;">ls</span> 5 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'x'</span>, <span style="color: #718c00;">''</span> <span style="color: #bb9200;">using</span> 1:4 w lp <span style="color: #bb9200;">ls</span> 6 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'z'</span>
+</pre>
+</div>
+
+
+<div id="org03bff4f" class="figure">
+<p><img src="./fig/fecha.png" alt="fecha.png" />
+</p>
+</div>
+
+<p>
+Intervalo de interés
+</p>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+
+<span style="color: #f5871f;">set</span> xdata time
+<span style="color: #f5871f;">set</span> timefmt <span style="color: #718c00;">"%Y-%m-%d"</span>
+<span style="color: #f5871f;">set</span> format x <span style="color: #718c00;">"%d"</span>
+
+<span style="color: #f5871f;">set</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">""</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">"sigma [cm]"</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">"D&#237;as de marzo"</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/fecha.dat"</span>
+<span style="color: #f5871f;">set</span> xrange [<span style="color: #718c00;">"2017-03-01"</span>:<span style="color: #718c00;">"2017-04-01"</span>]
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 1:2 w lp <span style="color: #bb9200;">ls</span> 5 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'x'</span>, <span style="color: #718c00;">''</span> <span style="color: #bb9200;">using</span> 1:4 w lp <span style="color: #bb9200;">ls</span> 6 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'z'</span>
+</pre>
+</div>
+
+<p>
+<img src="./fig/fecha2.png" alt="fecha2.png" />
+Para conocer los formatos completos de tiempo, revisar <a href="https://gnuplot.sourceforge.net/docs_4.2/node274.html">Timefmt</a>.
+</p>
+</div>
+</div>
+<div id="outline-container-org795258b" class="outline-2">
+<h2 id="org795258b">Colores</h2>
+<div class="outline-text-2" id="text-org795258b">
+</div>
+<div id="outline-container-org5c0af82" class="outline-3">
+<h3 id="org5c0af82">Paletas de grises</h3>
+<div class="outline-text-3" id="text-org5c0af82">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">set</span> key left
+<span style="color: #f5871f;">load</span> <span style="color: #718c00;">"greys.pal"</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/parabola.dat"</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> 1:2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 1 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 1"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+0.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 2 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 2"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+1.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 3 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 3"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+2.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 4 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 4"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+3.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 5 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 5"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+4.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 6 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 6"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+5.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 7 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 7"</span>,\
+     file <span style="color: #bb9200;">using</span> ($1+6.0):2 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 8 <span style="color: #bb9200;">lw</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">"lt 8"</span>
+
+<span style="color: #f5871f;">set</span> output
+
+</pre>
+</div>
+
+
+<div id="org69c4e11" class="figure">
+<p><img src="./fig/paletaGrises.png" alt="paletaGrises.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org508468d" class="outline-3">
+<h3 id="org508468d">Paletas</h3>
+</div>
+</div>
+<div id="outline-container-org421cd1c" class="outline-2">
+<h2 id="org421cd1c">Tipos de gráficas</h2>
+<div class="outline-text-2" id="text-org421cd1c">
+</div>
+<div id="outline-container-orgdf14ad3" class="outline-3">
+<h3 id="orgdf14ad3">Scatterplot</h3>
+<div class="outline-text-3" id="text-orgdf14ad3">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'x'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'f(x)'</span>
+<span style="color: #f5871f;">set</span> grid
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/scatterplot.dat'</span>
+
+<span style="color: #f5871f;">set</span> format y <span style="color: #718c00;">"%.1tx10^{%+03T}"</span>
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">points</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">""</span>
+
+</pre>
+</div>
+
+
+<div id="org5eba937" class="figure">
+<p><img src="./fig/plotSca.png" alt="plotSca.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'x'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'f(x) \times 10^{-4}'</span>
+<span style="color: #f5871f;">set</span> grid
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">'./data/scatterplot.dat'</span>
+
+<span style="color: #f5871f;">set</span> format y <span style="color: #718c00;">"%.1t"</span>
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">points</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">""</span>
+</pre>
+</div>
+
+
+<div id="org6df1d87" class="figure">
+<p><img src="./fig/plotSca2.png" alt="plotSca2.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orga4f4825" class="outline-3">
+<h3 id="orga4f4825">Boxes</h3>
+<div class="outline-text-3" id="text-orga4f4825">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">load</span> <span style="color: #718c00;">'spectral.pal'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/combinacionl.dat"</span>
+
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">Each bar is half the (visual) width of its x-range.</span>
+<span style="color: #f5871f;">set</span> boxwidth 0.02 absolute
+<span style="color: #f5871f;">set</span> style fill solid 1.0 border -1
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set style fill solid 1.0 noborder</span>
+
+<span style="color: #c82829;">bin_width =</span> 0.02;
+<span style="color: #c82829;">bin_number(x) =</span> <span style="color: #4271ae;">floor</span>(x/bin_width)
+<span style="color: #c82829;">rounded(x) =</span> bin_width * ( bin_number(x) + 0.5 )
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma_e$ [mrad]'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">"Frequency"</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> (rounded($26)):(N) <span style="color: #bb9200;">smooth</span> frequency <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">boxes</span> <span style="color: #bb9200;">ls</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">""</span>
+</pre>
+</div>
+
+
+<div id="org66322fc" class="figure">
+<p><img src="./fig/boxes.png" alt="boxes.png" />
+</p>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">load</span> <span style="color: #718c00;">'spectral.pal'</span>
+
+<span style="color: #c82829;">file=</span><span style="color: #718c00;">"./data/combinacionl.dat"</span>
+stats file <span style="color: #bb9200;">using</span> 26 name <span style="color: #718c00;">"X"</span> nooutput
+<span style="color: #c82829;">N=</span>1.0/X_records
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;"># X_records es el n'umero de puntos </span>
+<span style="color: #c82829;">titulo =</span> <span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">"N = %d"</span>, X_records)
+
+<span style="color: #8e908c;"># </span><span style="color: #8e908c;">Each bar is half the (visual) width of its x-range.</span>
+<span style="color: #f5871f;">set</span> boxwidth 0.02 absolute
+<span style="color: #f5871f;">set</span> style fill solid 1.0 border -1
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set style fill solid 1.0 noborder</span>
+
+<span style="color: #c82829;">bin_width =</span> 0.02;
+<span style="color: #c82829;">bin_number(x) =</span> <span style="color: #4271ae;">floor</span>(x/bin_width)
+<span style="color: #c82829;">rounded(x) =</span> bin_width * ( bin_number(x) + 0.5 )
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'$\gamma_e$ [mrad]'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">"Frequency"</span>
+
+<span style="color: #8959a8;">plot</span> file <span style="color: #bb9200;">using</span> (rounded($26)):(N) <span style="color: #bb9200;">smooth</span> frequency <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">boxes</span> <span style="color: #bb9200;">ls</span> 1 t titulo
+</pre>
+</div>
+
+
+<div id="org3503c0b" class="figure">
+<p><img src="./fig/boxes1.png" alt="boxes1.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf9f4d3b" class="outline-3">
+<h3 id="orgf9f4d3b">Circle</h3>
+</div>
+
+<div id="outline-container-org0947ed6" class="outline-3">
+<h3 id="org0947ed6">Barras</h3>
+</div>
+
+<div id="outline-container-orgdf96542" class="outline-3">
+<h3 id="orgdf96542">Vectores</h3>
+</div>
+</div>
+<div id="outline-container-org5b92942" class="outline-2">
+<h2 id="org5b92942">Regresión lineal (fit)</h2>
+</div>
+
+<div id="outline-container-org14dda6c" class="outline-2">
+<h2 id="org14dda6c">Ejes secundarios</h2>
+</div>
+
+<div id="outline-container-orgb446959" class="outline-2">
+<h2 id="orgb446959">Ciclos (loop)</h2>
+</div>
+
+<div id="outline-container-org8120d4c" class="outline-2">
+<h2 id="org8120d4c">Filtar datos (awk)</h2>
+<div class="outline-text-2" id="text-org8120d4c">
+</div>
+<div id="outline-container-org986e695" class="outline-3">
+<h3 id="org986e695">Ejemplo 1</h3>
+<div class="outline-text-3" id="text-org986e695">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+
+<span style="color: #f5871f;">set</span> key left
+<span style="color: #f5871f;">set</span> size ratio -1
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'X/d'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'Z/d'</span>
+
+<span style="color: #c82829;">file =</span> <span style="color: #718c00;">'./data/derivaDays.dat'</span>
+<span style="color: #c82829;">condition(y,m,d)=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">'/%d-%.2d-%.2d/'</span>, y,m,d)
+<span style="color: #c82829;">action=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">" print "</span>)
+<span style="color: #c82829;">cmd(y,m,d)=</span> <span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">"&lt;awk '%s {%s}' %s"</span>, condition(y,m,d), action, file)
+
+<span style="color: #f5871f;">set</span> xtics rotate by 90 right
+<span style="color: #f5871f;">set</span> grid
+<span style="color: #f5871f;">set</span> xrange [<span style="color: #f5871f;">0.005:0.025</span>]
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">-0.025:-0.005</span>]
+
+<span style="color: #8959a8;">plot</span> cmd(2024,6,21)  <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21-jun'</span>,\
+     cmd(2024,8,6)   <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'06-ago'</span>,\
+     cmd(2024,8,26)  <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'26-ago'</span>,\
+     cmd(2024,9,13)  <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'13-sep'</span>,\
+     cmd(2024,9,29)  <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'29-sep'</span>,\
+     cmd(2024,10,17) <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'17-oct'</span>,\
+     cmd(2024,11,6)  <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'06-nov'</span>,\
+     cmd(2024,12,21) <span style="color: #bb9200;">using</span> ($7/$6):($9/$6) <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21-dic'</span>
+</pre>
+</div>
+
+
+<div id="org3db4b12" class="figure">
+<p><img src="./fig/awk1.png" alt="awk1.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge71126a" class="outline-2">
+<h2 id="orge71126a">Multiplot</h2>
+<div class="outline-text-2" id="text-orge71126a">
+</div>
+<div id="outline-container-orgbc4aad5" class="outline-3">
+<h3 id="orgbc4aad5">Ejemplo</h3>
+<div class="outline-text-3" id="text-orgbc4aad5">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">load</span> <span style="color: #718c00;">'spectral.pal'</span>
+<span style="color: #f5871f;">set</span> datafile columnheader
+<span style="color: #f5871f;">set</span> datafile separator <span style="color: #718c00;">","</span>
+
+<span style="color: #f5871f;">set</span> multiplot layout 3,3\
+    margins 0.1,0.95,0.1,0.95 \
+    spacing 0.0,0.0
+
+<span style="color: #f5871f;">set</span> format y <span style="color: #718c00;">"%.1f"</span>
+<span style="color: #f5871f;">set</span> format x <span style="color: #718c00;">"%.1f"</span>
+
+<span style="color: #c82829;">f=</span><span style="color: #718c00;">'./data/outputA.dat'</span>
+<span style="color: #c82829;">g=</span><span style="color: #718c00;">'./data/driftRealA.dat'</span>
+
+<span style="color: #c82829;">condition(y,m,d)=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">'/%d-%.2d-%.2d/'</span>, y,m,d)
+<span style="color: #c82829;">action=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">" print "</span>)
+<span style="color: #c82829;">cmd(y,m,d, file)=</span> <span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">"&lt;awk '%s {%s}' %s"</span>, condition(y,m,d), action, file)
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set xtics rotate by 90 right</span>
+<span style="color: #f5871f;">set</span> xrange [<span style="color: #f5871f;">6.5:9.5</span>]
+<span style="color: #f5871f;">set</span> x2range [<span style="color: #f5871f;">6.5:9.5</span>]
+<span style="color: #f5871f;">set</span> yrange [<span style="color: #f5871f;">2.0:6.5</span>]
+<span style="color: #f5871f;">set</span> y2range [<span style="color: #f5871f;">2.0:6.5</span>]
+<span style="color: #f5871f;">set</span> format y2 <span style="color: #718c00;">"%0.1f"</span>
+<span style="color: #f5871f;">set</span> y2tics 2,1,6 
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;"># 01</span>
+<span style="color: #f5871f;">unset</span> y2tics
+<span style="color: #f5871f;">unset</span> xtics
+<span style="color: #f5871f;">unset</span> ytics
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">''</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">''</span>
+
+<span style="color: #f5871f;">set</span> ytics 1 nomirror
+<span style="color: #8959a8;">plot</span> cmd(2024,6,21,f)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21 Jun'</span>,\
+     cmd(2024,6,21,g)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 1 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa=$'</span>
+
+
+<span style="color: #f5871f;">set</span> x2tics
+<span style="color: #f5871f;">unset</span> ytics
+<span style="color: #8959a8;">plot</span> cmd(2024,8,3,f)   <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'03 Aug'</span>,\
+     cmd(2024,8,3,g)   <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 2 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+
+<span style="color: #f5871f;">unset</span> x2tics
+<span style="color: #8959a8;">plot</span> cmd(2024,8,21,f)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 3  <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21 Aug'</span>,\
+     cmd(2024,8,21,g)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 3 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'z [m]'</span>
+<span style="color: #f5871f;">unset</span> ytics
+
+<span style="color: #8959a8;">plot</span> cmd(2024,9,6,f)   <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 4 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'06 Sep'</span>,\
+     cmd(2024,9,6,g)   <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 4 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">unset</span> ytics
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">''</span>
+<span style="color: #8959a8;">plot</span> cmd(2024,9,21,f)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 5 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21 Sep'</span>,\
+     cmd(2024,9,21,g)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 5 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">set</span> y2tics
+<span style="color: #8959a8;">plot</span> cmd(2024,10,6,f)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 6 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'06 Oct'</span>,\
+     cmd(2024,10,6,g)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 6 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">set</span> xtics nomirror
+<span style="color: #f5871f;">set</span> ytics nomirror
+<span style="color: #f5871f;">unset</span> y2tics
+<span style="color: #8959a8;">plot</span> cmd(2024,10,21,f) <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 7 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21 Nov'</span>,\
+     cmd(2024,10,21,g) <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 7 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'x [m]'</span>
+<span style="color: #f5871f;">unset</span> ytics
+<span style="color: #f5871f;">unset</span> xtics
+<span style="color: #8959a8;">plot</span> cmd(2024,11,9,f)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 8 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'11 Nov'</span>,\
+     cmd(2024,11,9,g)  <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 8 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">''</span>
+<span style="color: #f5871f;">set</span> xtics nomirror
+<span style="color: #8959a8;">plot</span> cmd(2024,12,21,f) <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> -1 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'21 Dec'</span>,\
+     cmd(2024,12,21,g) <span style="color: #bb9200;">using</span> 7:9 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span>  <span style="color: #bb9200;">ls</span> 0 dt 2 <span style="color: #bb9200;">title</span> <span style="color: #718c00;">'$\kappa$'</span>
+
+<span style="color: #f5871f;">unset</span> multiplot
+</pre>
+</div>
+
+
+<div id="org5861581" class="figure">
+<p><img src="./fig/multiplot1.png" alt="multiplot1.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc248898" class="outline-2">
+<h2 id="orgc248898">Paletas de colores</h2>
+</div>
+
+<div id="outline-container-org239165f" class="outline-2">
+<h2 id="org239165f">Gráficas en 3D</h2>
+</div>
+
+<div id="outline-container-org7272295" class="outline-2">
+<h2 id="org7272295">Dibujar en gnuplot</h2>
+<div class="outline-text-2" id="text-org7272295">
+<div class="org-src-container">
+<pre class="src src-gnuplot"><span style="color: #f5871f;">reset</span>
+<span style="color: #f5871f;">load</span> <span style="color: #718c00;">'spectral.pal'</span>
+<span style="color: #f5871f;">set</span> datafile columnheader
+<span style="color: #f5871f;">set</span> key left
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set size ratio -1</span>
+<span style="color: #f5871f;">set</span> xlabel <span style="color: #718c00;">'x [m]'</span>
+<span style="color: #f5871f;">set</span> ylabel <span style="color: #718c00;">'z [m]'</span>
+
+<span style="color: #f5871f;">set</span> format y <span style="color: #718c00;">"%.1f"</span>
+<span style="color: #f5871f;">set</span> format x <span style="color: #718c00;">"%.1f"</span>
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set format y ""</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set format x ""</span>
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set format x "%.3t"#; set ytic(12345)</span>
+
+<span style="color: #c82829;">f=</span><span style="color: #718c00;">'./data/driftReal.dat'</span>
+<span style="color: #c82829;">condition(y,m,d)=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">'/%d-%.2d-%.2d/'</span>, y,m,d)
+<span style="color: #c82829;">action=</span><span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">" print "</span>)
+<span style="color: #c82829;">cmd(y,m,d, file)=</span> <span style="color: #4271ae;">sprintf</span>(<span style="color: #718c00;">"&lt;awk '%s {%s}' %s"</span>, condition(y,m,d), action, file)
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set xtics rotate by 90 right</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set xrange [-2.0:-0.2]</span>
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set yrange [-1.2:1.0]</span>
+<span style="color: #f5871f;">set</span> grid
+
+<span style="color: #8e908c;">#</span><span style="color: #8e908c;">set title "Errores de deriva del 21 de Junio"</span>
+
+
+<span style="color: #f5871f;">set</span> label <span style="color: #718c00;">'$\omega=0^\circ$'</span> at  8.32, 5.2362
+<span style="color: #f5871f;">set</span> label <span style="color: #718c00;">'$\omega=30^\circ$'</span> at 8.48, 5.6018
+
+
+<span style="color: #f5871f;">set</span> object circle at first  8.2826, 5.2362 radius char 0.5 fillcolor rgb <span style="color: #718c00;">'red'</span> <span style="color: #bb9200;">fillstyle</span> solid noborder
+<span style="color: #f5871f;">set</span> object circle at first 8.4402, 5.6018 radius char 0.5 fillcolor rgb <span style="color: #718c00;">'red'</span> <span style="color: #bb9200;">fillstyle</span> solid noborder
+
+<span style="color: #8959a8;">plot</span> cmd(2024,9,30,f) <span style="color: #bb9200;">using</span> 8:10 <span style="color: #bb9200;">with</span> <span style="color: #4271ae;">lines</span> <span style="color: #bb9200;">ls</span> 1  <span style="color: #bb9200;">title</span> <span style="color: #718c00;">''</span>
+</pre>
+</div>
+
+
+<div id="orgbb08d10" class="figure">
+<p><img src="./fig/draft1.png" alt="draft1.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcb8cff6" class="outline-2">
+<h2 id="orgcb8cff6">Animación</h2>
+</div>
+
+
+<div id="outline-container-orgdf72cbd" class="outline-2">
+<h2 id="orgdf72cbd">Gráficas en tiempo real</h2>
+<div class="outline-text-2" id="text-orgdf72cbd">
+<div class="org-src-container">
+<pre class="src src-gnuplot">
+</pre>
+</div>
+
+
+<div id="orgf67ac8c" class="figure">
+<p><img src="./fig/label.png" alt="label.png" />
+</p>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Isaías Moreno-Cruz</p>
-<p class="date">Created: 2024-12-09 Mon 17:01</p>
+<p class="date">Created: 2025-05-12 Mon 15:14</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -9,7 +9,7 @@
 
 En general Gnuplot te permite graficar un conjunto de datos 
 
-Es un curso para usuarios de linux.
+Es un curso para usuarios de linux ([[https://github.com/imorenoc/gnuplot][Curso de gnuplot]])
 
 * Instalación
 
@@ -24,6 +24,16 @@ sudo apt-get install gnuplot
 ## Archlinux
 sudo pacman -S gnuplot  
 #+end_src
+
+Para macOS puede instalar [[https://brew.sh/][Homebrew]] (necesita Xcode), en Windows puede ser una alternativa Windows Subsystem for Linux 2 (WSL2).
+
+
+También es necesario tener instalado LaTeX
+#+begin_src sh :exports both
+  ## Archlinux
+  sudo pacman -S texlive
+#+end_src
+
 
 
 ** Ejecución
@@ -158,7 +168,7 @@ Ahora tenemos un archivo /junio.eps/ y un archivo /junio.tex/, para obtener la g
 Ahora tenemos un archivo /tex/ con la gráfica. Esta información ya es posible agregar a un documento de LaTeX, para que nosotros puedamos visualizarla vamos a escribir un prqueño texto de latex que nos permita obtener nuestra gráfica en un pdf.
 
 
-#+begin_src latex :results none :tangle fig.tex
+#+begin_src latex :results none :tangle fig.tex :exports both
   \documentclass{article}
   \usepackage{graphicx}
   \usepackage{color}
@@ -183,7 +193,7 @@ Ahora tenemos un archivo /tex/ con la gráfica. Esta información ya es posible 
 
 * Script gp2pdf
 
-#+begin_src shell :tangle gp2pdf.sh
+#+begin_src shell :tangle gp2pdf.sh :exports both
   #!/bin/bash
 #--------------------------------------------------------------------
 # SCRIPT: 	GP2PDF.SH
@@ -246,22 +256,22 @@ rm fig.pdf fig.eps
 
 Agregar permiso de ejecucuón al archivo =gp2pdf.sh=
 
-#+begin_src shell
+#+begin_src shell :exports both
   chmod +x gp2pdf.sh
 #+end_src
 
 Usar el archivo =gp2pdf.sh=
 
-#+begin_src shell :results none
+#+begin_src shell :results none :exports both
   ./gp2pdf.sh junio.gp
 #+end_src
 
 
 ** Agregar el script gp2pdf al $PATH
 
-Un script del shell puede agregarse a la variable =$PATH=
+Un script del shell puede agregarse a la variable =$PATH=, al colocar la sigiente linea de texto en el archivo =.bashrc=, =.zshrc= o =.profile= (macOS).
 
-#+begin_src shell
+#+begin_src shell :exports both
 export PATH=$PATH:/home/isaias/Documents/script  
 #+end_src
 
@@ -269,6 +279,579 @@ Ahora podemos hacer uso del script =gp2pdf= desde cualquier carpeta.
 
 * Editor de texto
 
+El editor de texto que recomiendo es =emacs=, pero pueden usar con el que se sientan más comodos.
+
+A partir de ahora, únicamente escribiremos scripts de gnuplot.
+
+* Comandos básicos de Gnuplot
+
+** Etiquetas esenciales
+
+#+begin_src gnuplot :file "./fig/title.png" :results file graphics :exports both
+  reset
+  set title 'Función sin(x)'
+  set xlabel 'Eje X'
+  set ylabel 'Eje y'
+  set grid
+
+  f(x) = sin(x)
+
+  plot [0:2*pi] f(x)
+#+end_src
+
+#+RESULTS:
+[[file:./fig/title.png]]
+** Etiquetas en los ejes (xtics/ytics)
+
+#+begin_src gnuplot :file "./fig/xtics.png" :results file graphics :exports both
+  reset
+  set title 'Función sin(x)'
+  set xlabel 'Eje X'
+  set ylabel 'Eje y'
+
+  f(x) = sin(x)
+  set xtics ("pi/2" pi/2, "pi" pi, "3pi/2" 3*pi/2, "2pi" 2*pi)
+  set ytics 0.4
+  set grid
+
+  plot [0:2*pi] f(x)
+#+end_src
+
+#+RESULTS:
+[[file:./fig/xtics.png]]
+
+Es posible remover las etiquetas de los ejes utilizando =unset xtics= o =unset ytics=.
+
+
+** Estilos
+
+
+*** Test
+
+#+begin_src gnuplot :file "./fig/test.png" :results file graphics :exports both
+  test
+#+end_src
+
+#+RESULTS:
+[[file:./fig/test.png]]
+
+
+*** Obtención de datos a partir de una función
+
+#+begin_src gnuplot
+  set table './data/funciones.dat'
+
+  f(x) = sin(x)
+  g(x) = cos(x)
+
+  plot [0:2*pi] f(x) , g(x)
+  
+  unset table
+#+end_src
+
+#+RESULTS:
+
+*** Lineas y puntos
+
+#+begin_src gnuplot :file "./fig/estilos.png" :results file graphics :exports both
+  reset
+  set key left bottom
+
+  set xlabel 'Eje X'
+  set ylabel 'Eje y'
+
+  file='./data/funciones.dat'
+
+  plot file index 0 using 1:2 with points title "sin(x)",\
+       file index 1 using 1:2 with linespoints title "cos(x)"
+#+end_src
+
+#+RESULTS:
+[[file:./fig/estilos.png]]
+
+*** pointtype, pointsize, linewidth
+
+#+begin_src gnuplot :file "./fig/estilos2.png" :results file graphics :exports both
+  reset
+  set key left bottom
+
+  set xlabel 'Eje X'
+  set ylabel 'Eje y'
+
+  file='./data/funciones.dat'
+
+  plot file index 0 using 1:2 with points pointtype 6 title "sin(x)",\
+       file index 0 using 1:($2+0.1)  with lines linewidth 4 title "sin(x) + pi",\
+       file index 1 using 1:2 with points pointtype 4 pointsize 0.1 title "cos(x)"
+#+end_src
+
+#+RESULTS:
+[[file:./fig/estilos2.png]]
+
+*** range
+
+#+begin_src gnuplot :file "./fig/estilos3.png" :results file graphics :exports both
+  reset
+  #set key left bottom
+
+  set xlabel 'y'
+  set ylabel 'f(x)'
+  set xrange [1:2]
+  set yrange [0.6:1.3]
+
+  file='./data/funciones.dat'
+  
+  plot file index 0 using 1:2 with linespoints title "sin(x)"
+#+end_src
+
+#+RESULTS:
+[[file:./fig/estilos3.png]]
 
 
 
+*** dashtype
+
+Es posible definir tu propio patrón usando una cadena con los siguientes caracteres:
+
+- "-":segmento sólido
+- ".":punto
+- "_":espacio en blanco
+
+#+begin_src gnuplot :file "./fig/estilos4.png" :results file graphics :exports both
+  reset
+  set key left bottom
+
+  set xlabel 'Eje X'
+  set ylabel 'Eje y'
+
+  file='./data/funciones.dat'
+
+  plot file index 0 using 1:2 with lines dashtype 2  title "sin(x)",\
+       file index 1 using 1:2 with lines dashtype "-.._"  title "cos(x)"      
+#+end_src
+
+#+RESULTS:
+[[file:./fig/estilos4.png]]
+
+
+*** Formato
+
+
+#+begin_src gnuplot :file "./fig/estilos4.png" :results file graphics :exports both
+  reset
+  set key left bottom
+
+  set format y "%.1f"
+  set format x "%.1f"
+
+  set xlabel 'x'
+  set ylabel 'f(x)'
+
+  file='./data/funciones.dat'
+
+  plot file index 0 using 1:2 with lines title "sin(x)",\
+       file index 1 using 1:2 with lines title "cos(x)"      
+#+end_src
+
+#+RESULTS:
+[[file:./fig/estilos4.png]]
+
+Ver [[https://gnuplot.sourceforge.net/docs_4.2/node184.html][Format specifiers]]
+
+*** Más estilos
+
+- =set size square=, gráfica cuadrada
+- =set size ratio 1.5=, relación de tamaño de los ejes.
+- =unset key=, elimina las etiquetas de titulos
+- =set key=
+  - set key left top, mover el titulo a la izquierda (left, right, center) y hacia arriba (top, bottom, center).
+  - set key out horiz, mover las etiquetas fuera de la caja en horizontal (horiz, vert)
+- =unset border=, borra los ejes coordenados
+- =set zeroaxis=, coloca los ejes coordenados
+- =unset colorbox=, borra la caja de colores
+
+
+No es necesario
+
+- w, with
+- p, points
+- pt, point type
+- ps, point size
+- lw, line width
+
+* Trabajar con fechas
+
+#+begin_src gnuplot :file "./fig/fecha.png" :results file graphics :exports both
+  reset
+
+  set xdata time
+  set timefmt "%Y-%m-%d"
+  set format x "%b"
+
+  set title ""
+  set ylabel "sigma [cm]"
+  set xlabel ""
+
+  file="./data/fecha.dat"
+
+  plot file using 1:2 w lp ls 5 title 'x', '' using 1:4 w lp ls 6 title 'z'
+#+end_src
+
+#+RESULTS:
+[[file:./fig/fecha.png]]
+
+Intervalo de interés
+
+#+begin_src gnuplot :file "./fig/fecha2.png" :results file graphics :exports both
+  reset
+
+  set xdata time
+  set timefmt "%Y-%m-%d"
+  set format x "%d"
+
+  set title ""
+  set ylabel "sigma [cm]"
+  set xlabel "Días de marzo"
+
+  file="./data/fecha.dat"
+  set xrange ["2017-03-01":"2017-04-01"]
+
+  plot file using 1:2 w lp ls 5 title 'x', '' using 1:4 w lp ls 6 title 'z'
+#+end_src
+
+#+RESULTS:
+[[file:./fig/fecha2.png]]
+Para conocer los formatos completos de tiempo, revisar [[https://gnuplot.sourceforge.net/docs_4.2/node274.html][Timefmt]].
+
+* Colores
+
+
+** Paletas de grises
+
+#+begin_src gnuplot :file "./fig/paletaGrises.png" :results file graphics :exports both
+  reset
+  set key left
+  load "greys.pal"
+
+  file="./data/parabola.dat"
+
+  plot file using 1:2 with lines ls 1 lw 1 title "lt 1",\
+       file using ($1+0.0):2 with lines ls 2 lw 1 title "lt 2",\
+       file using ($1+1.0):2 with lines ls 3 lw 1 title "lt 3",\
+       file using ($1+2.0):2 with lines ls 4 lw 1 title "lt 4",\
+       file using ($1+3.0):2 with lines ls 5 lw 1 title "lt 5",\
+       file using ($1+4.0):2 with lines ls 6 lw 1 title "lt 6",\
+       file using ($1+5.0):2 with lines ls 7 lw 1 title "lt 7",\
+       file using ($1+6.0):2 with lines ls 8 lw 1 title "lt 8"
+
+  set output
+
+#+end_src
+
+#+RESULTS:
+[[file:./fig/paletaGrises.png]]
+
+** Paletas 
+
+
+
+
+* Tipos de gráficas
+
+** Scatterplot
+
+#+begin_src gnuplot :file "./fig/plotSca.png" :results file graphics :exports both
+  reset
+
+  set xlabel 'x'
+  set ylabel 'f(x)'
+  set grid
+  file='./data/scatterplot.dat'
+
+  set format y "%.1tx10^{%+03T}"
+  plot file with points title ""
+
+#+end_src
+
+#+RESULTS:
+[[file:./fig/plotSca.png]]
+
+#+begin_src gnuplot :file "./fig/plotSca2.png" :results file graphics :exports both
+  reset
+
+  set xlabel 'x'
+  set ylabel 'f(x) \times 10^{-4}'
+  set grid
+  file='./data/scatterplot.dat'
+
+  set format y "%.1t"
+  plot file with points title ""
+#+end_src
+
+#+RESULTS:
+[[file:./fig/plotSca2.png]]
+
+
+
+
+** Boxes
+
+
+#+begin_src gnuplot :file "./fig/boxes.png" :results file graphics :exports both
+reset
+load 'spectral.pal'
+
+file="./data/combinacionl.dat"
+
+# Each bar is half the (visual) width of its x-range.
+set boxwidth 0.02 absolute
+set style fill solid 1.0 border -1
+#set style fill solid 1.0 noborder
+
+bin_width = 0.02;
+bin_number(x) = floor(x/bin_width)
+rounded(x) = bin_width * ( bin_number(x) + 0.5 )
+
+set xlabel '$\gamma_e$ [mrad]'
+set ylabel "Frequency"
+
+plot file using (rounded($26)):(N) smooth frequency with boxes ls 1 title ""
+#+end_src
+
+#+RESULTS:
+[[file:./fig/boxes.png]]
+
+
+#+begin_src gnuplot :file "./fig/boxes1.png" :results file graphics :exports both
+reset
+load 'spectral.pal'
+
+file="./data/combinacionl.dat"
+stats file using 26 name "X" nooutput
+N=1.0/X_records
+## X_records es el n'umero de puntos 
+titulo = sprintf("N = %d", X_records)
+
+# Each bar is half the (visual) width of its x-range.
+set boxwidth 0.02 absolute
+set style fill solid 1.0 border -1
+#set style fill solid 1.0 noborder
+
+bin_width = 0.02;
+bin_number(x) = floor(x/bin_width)
+rounded(x) = bin_width * ( bin_number(x) + 0.5 )
+
+set xlabel '$\gamma_e$ [mrad]'
+set ylabel "Frequency"
+
+plot file using (rounded($26)):(N) smooth frequency with boxes ls 1 t titulo
+#+end_src
+
+#+RESULTS:
+[[file:./fig/boxes1.png]]
+
+
+
+
+** Circle
+
+** Barras
+
+** Vectores
+
+
+* Regresión lineal (fit)
+
+* Ejes secundarios
+
+* Ciclos (loop)
+
+* Filtar datos (awk)
+
+** Ejemplo 1
+
+#+begin_src gnuplot :file "./fig/awk1.png" :results file graphics :exports both
+  reset
+
+  set key left
+  set size ratio -1
+  set xlabel 'X/d'
+  set ylabel 'Z/d'
+  
+  file = './data/derivaDays.dat'
+  condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
+  action=sprintf(" print ")
+  cmd(y,m,d)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
+
+  set xtics rotate by 90 right
+  set grid
+  set xrange [0.005:0.025]
+  set yrange [-0.025:-0.005]
+
+  plot cmd(2024,6,21)  using ($7/$6):($9/$6) with lines title '21-jun',\
+       cmd(2024,8,6)   using ($7/$6):($9/$6) with lines title '06-ago',\
+       cmd(2024,8,26)  using ($7/$6):($9/$6) with lines title '26-ago',\
+       cmd(2024,9,13)  using ($7/$6):($9/$6) with lines title '13-sep',\
+       cmd(2024,9,29)  using ($7/$6):($9/$6) with lines title '29-sep',\
+       cmd(2024,10,17) using ($7/$6):($9/$6) with lines title '17-oct',\
+       cmd(2024,11,6)  using ($7/$6):($9/$6) with lines title '06-nov',\
+       cmd(2024,12,21) using ($7/$6):($9/$6) with lines title '21-dic'
+#+end_src
+
+#+RESULTS:
+[[file:./fig/awk1.png]]
+
+
+
+* Multiplot
+
+** Ejemplo
+
+#+begin_src gnuplot :file "./fig/multiplot1.png" :results file graphics :exports both
+  reset
+  load 'spectral.pal'
+  set datafile columnheader
+  set datafile separator ","
+
+  set multiplot layout 3,3\
+      margins 0.1,0.95,0.1,0.95 \
+      spacing 0.0,0.0
+
+  set format y "%.1f"
+  set format x "%.1f"
+
+  f='./data/outputA.dat'
+  g='./data/driftRealA.dat'
+
+  condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
+  action=sprintf(" print ")
+  cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
+
+  #set xtics rotate by 90 right
+  set xrange [6.5:9.5]
+  set x2range [6.5:9.5]
+  set yrange [2.0:6.5]
+  set y2range [2.0:6.5]
+  set format y2 "%0.1f"
+  set y2tics 2,1,6 
+
+  ## 01
+  unset y2tics
+  unset xtics
+  unset ytics
+  set xlabel ''
+  set ylabel ''
+
+  set ytics 1 nomirror
+  plot cmd(2024,6,21,f)  using 7:9 with lines  ls 1 title '21 Jun',\
+       cmd(2024,6,21,g)  using 7:9 with lines  ls 1 dt 2 title '$\kappa=$'
+
+
+  set x2tics
+  unset ytics
+  plot cmd(2024,8,3,f)   using 7:9 with lines  ls 2 title '03 Aug',\
+       cmd(2024,8,3,g)   using 7:9 with lines  ls 2 dt 2 title '$\kappa$'
+
+
+  unset x2tics
+  plot cmd(2024,8,21,f)  using 7:9 with lines  ls 3  title '21 Aug',\
+       cmd(2024,8,21,g)  using 7:9 with lines  ls 3 dt 2 title '$\kappa$'
+
+  set ylabel 'z [m]'
+  unset ytics
+
+  plot cmd(2024,9,6,f)   using 7:9 with lines  ls 4 title '06 Sep',\
+       cmd(2024,9,6,g)   using 7:9 with lines  ls 4 dt 2 title '$\kappa$'
+
+  unset ytics
+  set ylabel ''
+  plot cmd(2024,9,21,f)  using 7:9 with lines  ls 5 title '21 Sep',\
+       cmd(2024,9,21,g)  using 7:9 with lines  ls 5 dt 2 title '$\kappa$'
+
+  set y2tics
+  plot cmd(2024,10,6,f)  using 7:9 with lines  ls 6 title '06 Oct',\
+       cmd(2024,10,6,g)  using 7:9 with lines  ls 6 dt 2 title '$\kappa$'
+
+  set xtics nomirror
+  set ytics nomirror
+  unset y2tics
+  plot cmd(2024,10,21,f) using 7:9 with lines  ls 7 title '21 Nov',\
+       cmd(2024,10,21,g) using 7:9 with lines  ls 7 dt 2 title '$\kappa$'
+
+  set xlabel 'x [m]'
+  unset ytics
+  unset xtics
+  plot cmd(2024,11,9,f)  using 7:9 with lines  ls 8 title '11 Nov',\
+       cmd(2024,11,9,g)  using 7:9 with lines  ls 8 dt 2 title '$\kappa$'
+
+  set xlabel ''
+  set xtics nomirror
+  plot cmd(2024,12,21,f) using 7:9 with lines  ls -1 title '21 Dec',\
+       cmd(2024,12,21,g) using 7:9 with lines  ls 0 dt 2 title '$\kappa$'
+
+  unset multiplot
+#+end_src
+
+#+RESULTS:
+[[file:./fig/multiplot1.png]]
+
+
+
+* Paletas de colores
+
+* Gráficas en 3D
+
+* Dibujar en gnuplot
+
+#+begin_src gnuplot :file "./fig/draft1.png" :results file graphics :exports both
+reset
+load 'spectral.pal'
+set datafile columnheader
+set key left
+#set size ratio -1
+set xlabel 'x [m]'
+set ylabel 'z [m]'
+
+set format y "%.1f"
+set format x "%.1f"
+
+#set format y ""
+#set format x ""
+
+#set format x "%.3t"#; set ytic(12345)
+
+f='./data/driftReal.dat'
+condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
+action=sprintf(" print ")
+cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
+
+#set xtics rotate by 90 right
+#set xrange [-2.0:-0.2]
+#set yrange [-1.2:1.0]
+set grid
+
+#set title "Errores de deriva del 21 de Junio"
+
+
+set label '$\omega=0^\circ$' at  8.32, 5.2362
+set label '$\omega=30^\circ$' at 8.48, 5.6018
+
+
+set object circle at first  8.2826, 5.2362 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
+set object circle at first 8.4402, 5.6018 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
+
+plot cmd(2024,9,30,f) using 8:10 with lines ls 1  title ''
+#+end_src
+
+#+RESULTS:
+[[file:./fig/draft1.png]]
+
+
+* Animación
+
+
+* Gráficas en tiempo real
+
+#+begin_src gnuplot :file "./fig/label.png" :results file graphics :exports both
+
+#+end_src
