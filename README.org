@@ -9,7 +9,7 @@
 
 En general Gnuplot te permite graficar un conjunto de datos 
 
-Es un curso para usuarios de linux ([[https://github.com/imorenoc/gnuplot][Curso de gnuplot]])
+Es un curso para usuarios de linux.
 
 * Instalación
 
@@ -54,8 +54,6 @@ archlinux➜   ᐅ  gnuplot
         Terminal type is now qt
 gnuplot> 
 #+end_src
-
-
 
 
 
@@ -116,7 +114,7 @@ Habiamos graficado la columna dos (acimut) Vs la uno (cenit), no es común gráf
 La imagen obtenida puede ser guardada en una imagen png, con el siguiente comando:
 
 #+begin_src gnuplot :results none :exports both :session primera 
-  set terminal png size 600,500 enhanced "Helvetica,20"
+  set terminal png size 600,500 enhanced font "Helvetica,20"
   set output './fig/junio.png'
   replot
 #+end_src
@@ -460,6 +458,7 @@ Ver [[https://gnuplot.sourceforge.net/docs_4.2/node184.html][Format specifiers]]
 
 *** Más estilos
 
+- =set datafile separator ','=, archivo separado por comas
 - =set size square=, gráfica cuadrada
 - =set size ratio 1.5=, relación de tamaño de los ejes.
 - =unset key=, elimina las etiquetas de titulos
@@ -473,7 +472,14 @@ Ver [[https://gnuplot.sourceforge.net/docs_4.2/node184.html][Format specifiers]]
 
 No es necesario
 
+#+begin_src gnuplot :results none
+  plot file u 1:2 w l t ""
+#+end_src
+
+
+- u, using
 - w, with
+- l, lines
 - p, points
 - pt, point type
 - ps, point size
@@ -523,10 +529,38 @@ Intervalo de interés
 [[file:./fig/fecha2.png]]
 Para conocer los formatos completos de tiempo, revisar [[https://gnuplot.sourceforge.net/docs_4.2/node274.html][Timefmt]].
 
-* Colores
-
+* Paletas de Colores
 
 ** Paletas de grises
+
+#+begin_src shell :results output :exports both
+  less greys.pal
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+## line styles
+## lt -linetype
+## lc -linecolor
+
+set style line 1 lt 1 lc rgb '#252525' dt 2 # dark grey
+set style line 2 lt 1 lc rgb '#525252' #
+set style line 3 lt 1 lc rgb '#737373' # medium grey
+set style line 4 lt 1 lc rgb '#969696' # 
+set style line 5 lt 1 lc rgb '#BDBDBD' # light grey
+set style line 6 lt 1 lc rgb '#D9D9D9' # 
+set style line 7 lt 1 lc rgb '#F0F0F0' # 
+set style line 8 lt 1 lc rgb '#FFFFFF' # white  
+
+set style line 9 lt 1 dt 2 lc rgb '#252525' # dark grey
+set style line 10 lt 1 dt 3 lc rgb '#252525' # dark grey  
+set style line 11 lt 1 dt 4 lc rgb '#252525' # dark grey  
+set style line 12 lt 1 dt 5 lc rgb '#252525' # dark grey  
+set style line 13 lt 1 dt 6 lc rgb '#252525' # dark grey  
+#+end_example
+
+
 
 #+begin_src gnuplot :file "./fig/paletaGrises.png" :results file graphics :exports both
   reset
@@ -551,14 +585,51 @@ Para conocer los formatos completos de tiempo, revisar [[https://gnuplot.sourcef
 #+RESULTS:
 [[file:./fig/paletaGrises.png]]
 
+
+
 ** Paletas 
 
+[[https://github.com/Gnuplotting/gnuplot-palettes][Paletas de gnuplot]], se descargan y guardan en una carpeta para después leerlas.
 
+#+begin_src shell :result none
+  set loadpath '/home/isaias/Documents/gnuplot/gnuplot-palettes'
+  
+  MATLAB = "defined (0  0.0 0.0 0.5, \
+                   1  0.0 0.0 1.0, \
+                   2  0.0 0.5 1.0, \
+                   3  0.0 1.0 1.0, \
+                   4  0.5 1.0 0.5, \
+                   5  1.0 1.0 0.0, \
+                   6  1.0 0.5 0.0, \
+                   7  1.0 0.0 0.0, \
+                   8  0.5 0.0 0.0 )"
+#+end_src
+
+
+#+begin_src gnuplot :file "./fig/paletas.png" :results file graphics :exports both
+  reset
+  load 'paired.pal'
+  set key left bottom
+
+  set format y "%.1f"
+  set format x "%.1f"
+
+  set xlabel 'x'
+  set ylabel 'f(x)'
+
+  file='./data/funciones.dat'
+
+  plot file index 0 using 1:2 with lines ls 6 title "sin(x)",\
+       file index 1 using 1:2 with lines ls 7 title "cos(x)"      
+#+end_src
+
+#+RESULTS:
+[[file:./fig/paletas.png]]
 
 
 * Tipos de gráficas
 
-** Scatterplot
+** Scatterplot (Dispersión)
 
 #+begin_src gnuplot :file "./fig/plotSca.png" :results file graphics :exports both
   reset
@@ -575,6 +646,7 @@ Para conocer los formatos completos de tiempo, revisar [[https://gnuplot.sourcef
 
 #+RESULTS:
 [[file:./fig/plotSca.png]]
+Podemos utilizar otro formato.
 
 #+begin_src gnuplot :file "./fig/plotSca2.png" :results file graphics :exports both
   reset
@@ -591,13 +663,90 @@ Para conocer los formatos completos de tiempo, revisar [[https://gnuplot.sourcef
 #+RESULTS:
 [[file:./fig/plotSca2.png]]
 
+Gráficaremos varios archivos y realizaremos operaciones 
 
 
+#+begin_src gnuplot :file "./fig/plotSca3.png" :results file graphics :exports both
+reset
+load 'rdylbu.pal'
+set datafile separator ','
+
+# Pesos a dollar
+dolar  = 17.80        # dolar del año 2023
+factor = 0.8240892    # factor de conversión de dolar del 2023 al 2018
+p2d(x) = (factor * x/dolar)/1000  # pesos/MWh -> dolar del 2018/kWh 
+
+set xdata time
+set timefmt "%Y-%m-%d"
+set format x "%b"
+set ytics format "%.2f"
+
+set xrange ['2023-01-01':'2023-12-31']
+set ylabel 'Marginal prices [\$/kWh]'
+set grid
+
+plot './data/preciosBCSday.csv' using 1:(p2d($3)) with lines ls 2 title 'BCS',\
+     './data/preciosBCAday.csv' using 1:(p2d($3)) with lines ls 3 title 'BCA',\
+     './data/preciosSINday.csv' using 1:(p2d($3)) with lines ls 7 title 'SIN'
+#+end_src
+
+#+RESULTS:
+[[file:./fig/plotSca3.png]]
 
 ** Boxes
 
-
 #+begin_src gnuplot :file "./fig/boxes.png" :results file graphics :exports both
+  reset
+  load "rdylbu.pal"
+  set datafile separator ','
+
+  set style data histogram
+  set style fill solid 1.0
+
+  set xtics ("Jan" 1, "Feb" 2, "Mar" 3, "Apr" 4, "May" 5, "Jun" 6, "Jul" 7, "Aug" 8, "Sep" 9, "Oct" 10, "Nov" 11, "Dec" 12)
+
+  set ylabel 'DNI kWh/m$^2$/day'
+  set yrange [1:10]
+  set xrange [0.5:12.5]
+
+  file="./data/DNIsam.csv"
+
+  plot file using ($2/3.6) ls 2 title ''
+#+end_src
+
+#+RESULTS:
+[[file:./fig/boxes.png]]
+
+
+#+begin_src gnuplot :file "./fig/boxes1a.png" :results file graphics :exports both
+  reset
+  load 'dark2.pal'
+  set datafile separator ','
+
+  #set boxwidth 0.9 relative
+  set style data histogram
+  set style fill solid 0.5
+
+  set xtics ("Jan" 1, "Feb" 2, "Mar" 3, "Apr" 4, "May" 5, "Jun" 6, "Jul" 7, "Aug" 8, "Sep" 9, "Oct" 10, "Nov" 11, "Dec" 12) #rotate by 45 offset -1.5, -1.2
+
+  set ylabel 'DNI kWh/m$^2$/day'
+  set yrange [0:10]
+  set xrange [0:13]
+  set grid
+
+  plot './data/DNIsam.csv' using ($2/3.6) ls 1 title 'BCS',\
+       './data/DNIsamHermosillo.csv' using ($2/3.6) ls 2 title 'Hermosillo',
+
+#+end_src
+
+#+RESULTS:
+[[file:./fig/boxes1a.png]]
+
+
+Si tienes una serie de datos que quieres mostrar en un histograma
+
+
+#+begin_src gnuplot :file "./fig/boxes1.png" :results file graphics :exports both
 reset
 load 'spectral.pal'
 
@@ -606,11 +755,10 @@ file="./data/combinacionl.dat"
 # Each bar is half the (visual) width of its x-range.
 set boxwidth 0.02 absolute
 set style fill solid 1.0 border -1
-#set style fill solid 1.0 noborder
 
 bin_width = 0.02;
 bin_number(x) = floor(x/bin_width)
-rounded(x) = bin_width * ( bin_number(x) + 0.5 )
+rounded(x) = bin_width * ( bin_number(x)+0.5 )
 
 set xlabel '$\gamma_e$ [mrad]'
 set ylabel "Frequency"
@@ -619,50 +767,126 @@ plot file using (rounded($26)):(N) smooth frequency with boxes ls 1 title ""
 #+end_src
 
 #+RESULTS:
-[[file:./fig/boxes.png]]
+[[file:./fig/boxes1.png]]
 
 
-#+begin_src gnuplot :file "./fig/boxes1.png" :results file graphics :exports both
-reset
-load 'spectral.pal'
+#+begin_src gnuplot :file "./fig/boxes2.png" :results file graphics :exports both
+  reset
+  load 'spectral.pal'
 
-file="./data/combinacionl.dat"
-stats file using 26 name "X" nooutput
-N=1.0/X_records
-## X_records es el n'umero de puntos 
-titulo = sprintf("N = %d", X_records)
+  file="./data/combinacionl.dat"
+  
+  stats file using 26 name "X" nooutput
+  N=1.0/X_records
+  ## X_records es el n'umero de puntos 
+  titulo = sprintf("N = %d", X_records)
 
-# Each bar is half the (visual) width of its x-range.
-set boxwidth 0.02 absolute
-set style fill solid 1.0 border -1
-#set style fill solid 1.0 noborder
+  # Each bar is half the (visual) width of its x-range.
+  set boxwidth 0.02 absolute
+  set style fill solid 1.0 border -1
+  #set style fill solid 1.0 noborder
 
-bin_width = 0.02;
-bin_number(x) = floor(x/bin_width)
-rounded(x) = bin_width * ( bin_number(x) + 0.5 )
+  bin_width = 0.02;
+  bin_number(x) = floor(x/bin_width)
+  rounded(x) = bin_width * ( bin_number(x) + 0.5 )
 
-set xlabel '$\gamma_e$ [mrad]'
-set ylabel "Frequency"
+  set xlabel '$\gamma_e$ [mrad]'
+  set ylabel "Frequency"
 
-plot file using (rounded($26)):(N) smooth frequency with boxes ls 1 t titulo
+  plot file using (rounded($26)):N smooth frequency with boxes ls 1 t titulo
 #+end_src
 
 #+RESULTS:
-[[file:./fig/boxes1.png]]
-
+[[file:./fig/boxes2.png]]
 
 
 
 ** Circle
 
-** Barras
 
 ** Vectores
 
 
+** matrices
+
+#+begin_src gnuplot :file "./fig/matrices.png" :results file graphics :exports both
+reset
+load 'rdylbu.pal'
+set palette negative
+
+set pm3d implicit at b
+set view map
+unset surface
+
+set xlabel ""
+set ylabel "Hora del día"
+set cblabel "Potencia de Generación [MW]" rot
+
+set xrange [0:365]
+set yrange [0:23]
+set cbrange [0:50]
+set ytics 2
+unset border
+set grid
+
+set xtics ("Ene" 15, "Feb" 45, "Mar" 75, "Abr" 105, "May" 135, "Jun" 165, "Jul" 195, "Ago" 225, "Sep" 255, "Oct" 285, "Nov" 315, "Dic" 345) #rotate by 45 offset -1.5, -1.2
+
+
+splot "./data/gen.dat" matrix using 2:1:($3/1000) notitle 
+#+end_src
+
+#+RESULTS:
+[[file:./fig/matrices.png]]
+
+
+
+
 * Regresión lineal (fit)
 
+
+
+
+
 * Ejes secundarios
+
+#+begin_src gnuplot :file "./fig/eje.png" :results file graphics :exports both
+reset
+load 'dark2.pal'
+set datafile separator ','
+
+data = './data/25.038_-111.660_25.0384_-111.66_psm3-tmy_60_tmy.csv'
+stats data using 6 skip 3
+
+bins = 50
+max = STATS_max
+min = STATS_min
+width=(max-min)/bins
+hist(x,width)=width*floor(x/width)+width/2.0
+set boxwidth width*0.9
+set style fill solid 0.5 # fill style
+set grid
+
+set xtics 0,100,1000
+set y2tics 0,0.1,1
+set ytics nomirror
+set xrange [0:1020]
+
+set xlabel  'DNI [W/m$^2$]'
+set ylabel  '\# de datos'
+set y2label 'CFD'
+
+
+condition="FNR>3"
+action="if($6 > 0) print "
+cmd = sprintf("<awk -F ',' '%s {%s}' %s", condition, action, data)
+
+plot cmd using (hist($6,width)):(1.0) skip 3 smooth freq w boxes ls 6 notitle,\
+     './data/DNI_cfd.csv' using 1:2 with lines ls 8 lw 2 notitle axis x1y2
+#+end_src
+
+#+RESULTS:
+[[file:./fig/eje.png]]
+
 
 * Ciclos (loop)
 
@@ -797,7 +1021,6 @@ plot file using (rounded($26)):(N) smooth frequency with boxes ls 1 t titulo
 
 
 
-* Paletas de colores
 
 * Gráficas en 3D
 
@@ -848,6 +1071,68 @@ plot cmd(2024,9,30,f) using 8:10 with lines ls 1  title ''
 
 
 * Animación
+
+
+#+begin_src gnuplot :results none :exports both
+reset
+set size ratio -1
+
+date="2025-06-21"
+system(sprintf("mkdir -p %s", date))
+
+file(date)=sprintf("./data/rot_%s.dat", date)
+condition=""
+action(id)=sprintf("if($5 == %d ) print ", id)
+cmd(id)= sprintf("<awk '%s {%s}' %s", condition, action(id), file(date))
+
+file2(date)=sprintf("./data/poligono_%s.dat", date)
+condition2=""
+action2(id)=sprintf("if($4 == %d ) print ", id)
+cmd2(id)= sprintf("<awk '%s {%s}' %s", condition2, action2(id), file2(date))
+
+N=system(sprintf("awk 'END {print $5}' %s ",file(date)))
+titulo(id)=system(sprintf("./title.sh %s %d", file(date), id))
+
+
+## Tamaño del Fresnel
+w=1.14
+h=0.81
+
+# Caja
+xmin=-w/2
+xmax=w/2
+ymin=-h/2
+ymax=h/2
+set object 1 rect from xmin,ymin to xmax,ymax
+
+set xrange[xmin-0.2:xmax+0.2]
+set yrange[ymin-0.2:ymax+0.2]
+set grid
+
+set xlabel "y"
+set ylabel "z"
+set zlabel "x"
+
+set style fill transparent solid 0.2
+
+do for [i=1:N] {
+    set terminal pngcairo size 800,600 enhanced font 'Verdana,10'
+    set output sprintf("./%s/h%02d.png", date, i)
+
+    set title titulo(i)
+     plot cmd(i) using 2:3 with linespoints title "",\
+ 	 cmd2(i) using 1:2 with filledcurves  title "",\
+	 cmd2(i) using 1:2 with linespoints title ""
+     
+     set output
+}
+#+end_src
+
+#+begin_src shell
+  png2video h
+#+end_src
+
+
 
 
 * Gráficas en tiempo real
