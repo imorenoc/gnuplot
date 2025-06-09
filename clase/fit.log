@@ -1,0 +1,167 @@
+
+
+*******************************************************************************
+Mon Jun  2 17:31:53 2025
+
+
+FIT:    data read from file using 1:2
+        format = x:z
+        #datapoints = 11
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=A0*exp(-x/tau)
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   A0            tau          
+   0 1.7199022851e+06   0.00e+00  3.07e-01    1.000000e+00   1.000000e+00
+  12 4.7879703787e+03  -8.36e-05  3.07e-06    1.059524e+03   9.441057e-01
+
+After 12 iterations the fit converged.
+final sum of squares of residuals : 4787.97
+rel. change during last iteration : -8.36091e-10
+
+degrees of freedom    (FIT_NDF)                        : 9
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 23.0651
+variance of residuals (reduced chisquare) = WSSR/ndf   : 531.997
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+A0              = 1059.52          +/- 21.64        (2.042%)
+tau             = 0.944106         +/- 0.03483      (3.689%)
+
+correlation matrix of the fit parameters:
+                A0     tau    
+A0              1.000 
+tau            -0.507  1.000 
+
+
+*******************************************************************************
+Mon Jun  2 17:32:45 2025
+
+
+FIT:    data read from file using 1:2
+        format = x:z
+        #datapoints = 11
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=A0*exp(-x/tau)
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   A0            tau          
+   0 1.7199022851e+06   0.00e+00  3.07e-01    1.000000e+00   1.000000e+00
+  12 4.7879703787e+03  -8.36e-05  3.07e-06    1.059524e+03   9.441057e-01
+
+After 12 iterations the fit converged.
+final sum of squares of residuals : 4787.97
+rel. change during last iteration : -8.36091e-10
+
+degrees of freedom    (FIT_NDF)                        : 9
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 23.0651
+variance of residuals (reduced chisquare) = WSSR/ndf   : 531.997
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+A0              = 1059.52          +/- 21.64        (2.042%)
+tau             = 0.944106         +/- 0.03483      (3.689%)
+
+correlation matrix of the fit parameters:
+                A0     tau    
+A0              1.000 
+tau            -0.507  1.000 
+
+
+*******************************************************************************
+Mon Jun  2 17:35:18 2025
+
+
+FIT:    data read from file using 1:2
+        format = x:z
+        #datapoints = 11
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a1*x + a2*x**2 + a3*x**3
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a1            a2            a3           
+   0 1.7438290781e+06   0.00e+00  3.14e+01    1.000000e+00   1.000000e+00   1.000000e+00
+   5 1.3587063474e+06  -5.81e-04  3.14e-04    5.758319e+02  -2.971171e+02   3.713708e+01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 1.35871e+06
+rel. change during last iteration : -5.8146e-09
+
+degrees of freedom    (FIT_NDF)                        : 8
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 412.114
+variance of residuals (reduced chisquare) = WSSR/ndf   : 169838
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a1              = 575.832          +/- 426.2        (74.02%)
+a2              = -297.117         +/- 253.6        (85.35%)
+a3              = 37.1371          +/- 35.95        (96.8%)
+
+correlation matrix of the fit parameters:
+                a1     a2     a3     
+a1              1.000 
+a2             -0.969  1.000 
+a3              0.918 -0.986  1.000 
+
+
+*******************************************************************************
+Mon Jun  2 17:35:45 2025
+
+
+FIT:    data read from file using 1:2
+        format = x:z
+        #datapoints = 11
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a1*x + a2*x**2 + a3*x**3 + a4*x**4 + a5*x**5
+fitted parameters initialized with current variable values
+
+
+
+*******************************************************************************
+Mon Jun  2 17:35:55 2025
+
+
+FIT:    data read from file using 1:2
+        format = x:z
+        #datapoints = 11
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a1*x + a2*x**2 + a3*x**3 + a4*x**4 + a5*x**5
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a1            a2            a3            a4            a5           
+   0 2.2851859690e+07   0.00e+00  2.04e+03    5.758319e+02  -2.971171e+02   3.713708e+01   1.000000e+00   1.000000e+00
+   7 1.1544483898e+06  -1.65e-07  2.04e-04    2.089567e+03  -2.602898e+03   1.191153e+03  -2.349369e+02   1.682994e+01
+
+After 7 iterations the fit converged.
+final sum of squares of residuals : 1.15445e+06
+rel. change during last iteration : -1.64834e-12
+
+degrees of freedom    (FIT_NDF)                        : 6
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 438.643
+variance of residuals (reduced chisquare) = WSSR/ndf   : 192408
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a1              = 2089.57          +/- 1660         (79.44%)
+a2              = -2602.9          +/- 2676         (102.8%)
+a3              = 1191.15          +/- 1485         (124.7%)
+a4              = -234.937         +/- 339          (144.3%)
+a5              = 16.8299          +/- 27.25        (161.9%)
+
+correlation matrix of the fit parameters:
+                a1     a2     a3     a4     a5     
+a1              1.000 
+a2             -0.970  1.000 
+a3              0.921 -0.987  1.000 
+a4             -0.874  0.961 -0.993  1.000 
+a5              0.832 -0.933  0.977 -0.996  1.000 
