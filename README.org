@@ -1,6 +1,5 @@
 #+title: Gnuplot
 #+author: Isaías Moreno-Cruz
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/home/isaias/Documents/css/Rethink/rethink.css" />
 #+OPTIONS: toc:nil num:nil html-style:nil
 
 * Introducción
@@ -1399,7 +1398,7 @@ La función words(list), regresa el numero de elementos de una lista
   list="preciosBCAday preciosBCSday preciosSINday"
   item(n)=word(list,n)
 
-  plot for [j=1:words(list)] "./data/".item(j).".csv" using 1:3 with lines ls j title j
+  plot for [j=1:words(list)] "./data/".item(j).".csv" using 1:3 with lines ls j title item(j)
 #+end_src
 
 #+RESULTS:
@@ -1954,7 +1953,7 @@ unset multiplot
 
 #+begin_src gnuplot :file "./fig/spotCon.png" :results file graphics :exports both
   reset
-  #set palette @MATLAB
+  set palette @MATLAB
   set dgrid3d 40,40
   set size square
 
@@ -1963,60 +1962,69 @@ unset multiplot
 
   set xlabel "x"
   set ylabel "z"
-  unset colorbox
-
-  set pm3d interpolate 2,2
-  set contour
 
   set xrange [-1:1]
   set yrange [-1:1]
   set xtics -1,0.4,1
   set ytics -1,0.4,1
 
-  xr = -0.021387
-  yr = -0.01038
-  dr = 0.05
-  set arrow from xr,(yr-dr) to xr, (yr+dr) nohead lc rgb "red" front
-  set arrow from (xr-dr),yr to (xr+dr),yr nohead lc rgb "red" front
-  set object 1 ellipse at xr,yr size dr,dr front
-  set object 1 front lw 1 fc rgb "red" fs empty border
+  # xr = -0.021387
+  # yr = -0.01038
+  # dr = 0.05
+  # set arrow from xr,(yr-dr) to xr, (yr+dr) nohead lc rgb "red" front
+  # set arrow from (xr-dr),yr to (xr+dr),yr nohead lc rgb "red" front
+  # set object 1 ellipse at xr,yr size dr,dr front
+  # set object 1 front lw 1 fc rgb "red" fs empty border
 
   a=0.0496787*0.0485711
 
-  #set cntrparam levels discrete 10, 30, 50
-  splot "./data/xyz.dat" u 1:2:($3/a/1000) w pm3d title ""
-  
+  set contour base
+  set cntrparam levels auto #discrete 10, 30, 50
+  # set cntrparam levels discrete 10, 30, 50
+
+  splot "./data/xyz.dat" u 1:2:($3/a/1000) w lines title ""      
 #+end_src
 
 #+RESULTS:
 [[file:./fig/spotCon.png]]
 
 
-
-
-
 * Dibujar en gnuplot
 
+
+
+set object <id> rectangle from <x1>,<y1> to <x2>,<y2>
+set object <id> ellipse at <x1>,<y1> size <r1>,<r2>
+
+
 #+begin_src gnuplot :file "./fig/draft.png" :results file graphics :exports both
+reset
+set size square
 
-  reset
-  set size square
+set xrange [-1.1:1.1]
+set yrange [-1.1:1.1]
+set grid
 
-  set xrange [-1.1:1.1]
-  set yrange [-1.1:1.1]
-  set grid
+set xzeroaxis lt 1 lc 8 lw 2
+set yzeroaxis lt 1 lc 8 lw 2
 
-  set arrow from 0, graph 0 to 0, graph 1 nohead
-  set arrow from -1.1,0 to 1.1,0  nohead
+set object 1 rectangle from -1,-1 to 1,1
+set object 1 front lw 1 fillcolor rgb "#0000ff" fillstyle pattern 4
 
-  set object 1 rect from -1,-1 to 1,1
-  set object 1 front lw 1 fc rgb "#0000ff" fs pattern 1 bo -1
-  set object 2 ellipse at 0,0 size 2,2
-  set object 2 front lw 1 fc rgb "#ff0000" fs pattern 1 bo -1
+set object 2 ellipse at 0,0 size 2,2
+set object 2 front lw 1 fillstyle transparent solid 0.1 fillcolor "red"
 
-  plot "-" using 1:2 w lp title ""
-  0 0
-  0 0
+x=0.4
+f(x)=sqrt(1-x**2)
+
+set arrow from 0,0 to x,f(x) lw 3 lc "blue" head  # Flecha con punta
+set arrow from x,0 to x,f(x) lw 3 dashtype 2 lc "blue" nohead 
+
+set label "a" at x/2,-0.05
+set label "b" at x+0.05,f(x)/2
+set label '$c=\sqrt{a^2 + b^2 }$' at 0.25,-0.25
+
+plot NaN notitle
 #+end_src
 
 #+RESULTS:
