@@ -1603,62 +1603,80 @@ set margin <l/r/t/b> spacing <valor>
 [[file:./fig/multiplot1.png]]
 
 
+* Scrip multiplot
+
+#+begin_src shell :tangle gp2pdfmultiplot.sh :results none :exports both
+#!/bin/bash
+#--------------------------------------------------------------------
+# SCRIPT: 	IMPRIME
+# AUTHOR: 	ISAIAS MORENO
+# DATE: 	04-Jul-2023
+# 
+# PLATFORM: Linux
+## 
+
+# > gp2pdf file.gp
+# Utiliza las etiquetas de multiplot cuando en el archivo.gp utilices
+# multiplot
+#--------------------------------------------------------------------
+name=`basename $1`
+
+# Variables
+# ----------
+# \tiny \scriptsize \footnotesize \small
+# \normalsize
+# \large \Large \LARGE \huge \Huge
+lineW=2
+size='\normalsize'
+
+name=${name%.gp}
+# Ejecuta comandos en Gnuplot
+echo "set terminal epsl col sol lw $lineW" > newgp.gp
+#echo "set terminal epsl size 7in,5in col sol lw $lineW" > newgp.gp
+#echo "set terminal epsl size 7cm,5cm col sol lw $lineW" > newgp.gp
+echo "set output '${name}.tex' " >> newgp.gp
+cat ${name}.gp >> newgp.gp
+echo "unset multiplot" >> newgp.gp
+echo "unset output" >> newgp.gp
+echo "load 'newgp.gp'" | gnuplot
 
 
+# Genera el archivo fig.tex
+echo '\documentclass{article}' > fig.tex
+echo '\usepackage{graphicx}' >> fig.tex
+echo '\usepackage{color}' >> fig.tex
+echo '\usepackage{amsmath}' >> fig.tex
+echo '\usepackage{amssymb}' >> fig.tex
 
+echo '\usepackage[activeacute, spanish]{babel}' >> fig.tex
+echo '\usepackage[utf8x]{inputenc}' >> fig.tex
+echo '\usepackage[T1]{fontenc}' >> fig.tex
+echo '\spanishdecimal{.}' >> fig.tex
 
-** Ejemplos
+echo '' >> fig.tex
+echo '\pagestyle{empty}' >> fig.tex
+echo '\begin{document}' >> fig.tex
+echo "$size" >> fig.tex
+echo '\input{'$name'}' >> fig.tex
+echo '' >> fig.tex
+echo '\end{document}' >> fig.tex
 
-#+begin_src gnuplot :file "./fig/multiplot2.png" :results file graphics :exports both
-reset
-load "set2.pal"
+## Latex to Pdf
+latex fig
+dvips -E fig -o fig.eps
+epstopdf fig.eps -o "$name".pdf
+rm "$name".eps
 
-set multiplot
+## Recorte del pdf
+pdfcrop --margins "10 10 10 0" "$name".pdf
+mv "$name"-crop.pdf "$name".pdf
 
-file="./data/step2112.dat"
-
-set xlabel '$\gamma_s$'
-set ylabel '$\alpha$'
-
-set yrange [3:45]
-set xrange [-65:65]
-
-x1=-62.6
-x2=-62.1
-y1=4.6
-y2=5.6
-
-#set object 1 rect from x1,y1 to x2,y2
-set arrow from x1,y1 to -43,4.8 head filled
-set arrow from x1,y1 to -43,15 head filled
-
-plot file using 2:1 with linespoints ls 1 title "solar",\
-     file using 4:3 with linespoints ls 2 title "step"
-
-##############################################################################
-#unset border
-reset
-load "set2.pal"
-unset key
-unset xtics
-unset ytics
-unset xlabel
-unset ylabel
-
-set size 0.3,0.3
-set origin 0.21,0.12
-
-set xrange [x1:x2]
-set yrange [y1:y2]
-
-plot file using 2:1 with linespoints ls 1 title "solar",\
-     file using 4:3 with linespoints ls 2 title "step"
-
-unset multiplot
+rm "$name".tex
+rm fig.aux fig.dvi fig.tex fig.log
+rm fig.eps newgp.gp
+#evince "$name".pdf &
+#######################################################################
 #+end_src
-
-#+RESULTS:
-[[file:./fig/multiplot2.png]]
 
 
 
@@ -1678,15 +1696,19 @@ unset multiplot
   bin(x,width)=width*floor(x/width)
 
   ### Start multiplot (2x2 layout)
-  set multiplot layout 2,2 rowsfirst
+  set multiplot layout 2,2 rowsfirst\
+      margins 0.1,0.95,0.1,0.95 \
+      spacing 0.1,0.0
 
   # --- GRAPH a
+  unset xtics
   plot './data/pi_8000.dat' using (bin($2,binwidth)):(1.0) smooth freq with boxes t "N=8000"
 
   # --- GRAPH b
   plot './data/pi_16000.dat' using (bin($2,binwidth)):(1.0) smooth freq with boxes t "N=16000"
 
   # --- GRAPH c
+  set xtics
   plot './data/pi_32000.dat' using (bin($2,binwidth)):(1.0) smooth freq with boxes t "N=32000"
 
   # --- GRAPH d
@@ -1701,94 +1723,150 @@ unset multiplot
 
 ** Ejemplo
 
+#+begin_src gnuplot :file "./fig/multiplot3a.png" :results file graphics :exports both
+reset
+load "paired.pal"
+#set key left bottom
+
+set multiplot
+fileD="./data/stepDic.dat"
+
+set xlabel '$\gamma_s$'
+set ylabel '$\alpha$'
+
+set yrange [10:47]
+
+
+x1=-52
+y1= 21.28
+
+x2=-51.81
+y2=21.51
+
+set object 1 circle at ((x1+x2)/2),((y1+y2)/2) size 2 fc rgb "blue" fillstyle solid 0.3 lw 2
+
+plot fileD using 2:1 with lines ls 2 pointsize 1 title '$\hat{s}$',\
+     fileD using 4:3 with lines ls 8 pointsize 1 title '$\hat{n}$'
+
+##------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+reset
+load "paired.pal"
+unset key
+unset xtics
+unset ytics
+unset xlabel
+unset ylabel
+
+set size 0.45,0.3
+set origin 0.3,0.2
+
+set xrange [x1:x2]
+set yrange [y1:y2]
+
+plot fileD using 2:1 with lines ls 2 pointsize 1  title "",\
+     fileD using 4:3 with linespoints ls 8 pointsize 2  title ""
+
+unset multiplot
+#+end_src
+
+#+RESULTS:
+[[file:./fig/multiplot3a.png]]
+
+
+
+
+** Ejemplo
+
 #+begin_src gnuplot :file "./fig/multiplot4.png" :results file graphics :exports both
-  reset
-  load 'spectral.pal'
-  set datafile columnheader
-  set datafile separator ","
+    reset
+    load 'spectral.pal'
+    set datafile columnheader
+    set datafile separator ","
 
-  set multiplot layout 3,3\
-      margins 0.1,0.95,0.1,0.95 \
-      spacing 0.0,0.0
+    set multiplot layout 3,3\
+        margins 0.1,0.95,0.1,0.95 \
+        spacing 0.0,0.0
 
-  set format y "%.1f"
-  set format x "%.1f"
+    set format y "%.1f"
+    set format x "%.1f"
 
-  f='./data/outputA.dat'
-  g='./data/driftRealA.dat'
+    f='./data/outputA.dat'
+    g='./data/driftRealA.dat'
 
-  condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
-  action=sprintf(" print ")
-  cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
+    condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
+    action=sprintf(" print ")
+    cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
 
-  #set xtics rotate by 90 right
-  set xrange [6.5:9.5]
-  set x2range [6.5:9.5]
-  set yrange [2.0:6.5]
-  set y2range [2.0:6.5]
-  set format y2 "%0.1f"
-  set y2tics 2,1,6 
+    #set xtics rotate by 90 right
+    set xrange [6.5:9.5]
+    set x2range [6.5:9.5]
+    set yrange [2.0:6.5]
+    set y2range [2.0:6.5]
+    set format y2 "%0.1f"
+    set y2tics 2,1,6 
 
-  ## 01
-  unset y2tics
-  unset xtics
-  unset ytics
-  set xlabel ''
-  set ylabel ''
+    ## 01
+    unset y2tics
+    unset xtics
+    unset ytics
+    set xlabel ''
+    set ylabel ''
 
-  set ytics 1 nomirror
-  plot cmd(2024,6,21,f)  using 7:9 with lines  ls 1 title '21 Jun',\
-       cmd(2024,6,21,g)  using 7:9 with lines  ls 1 dt 2 title '$\kappa=$'
-
-
-  set x2tics
-  unset ytics
-  plot cmd(2024,8,3,f)   using 7:9 with lines  ls 2 title '03 Aug',\
-       cmd(2024,8,3,g)   using 7:9 with lines  ls 2 dt 2 title '$\kappa$'
+    set ytics 1 nomirror
+    plot cmd(2024,6,21,f)  using 7:9 with lines  ls 1 title '21 Jun',\
+         cmd(2024,6,21,g)  using 7:9 with lines  ls 1 dt 2 title '$\kappa=$'
 
 
-  unset x2tics
-  plot cmd(2024,8,21,f)  using 7:9 with lines  ls 3  title '21 Aug',\
-       cmd(2024,8,21,g)  using 7:9 with lines  ls 3 dt 2 title '$\kappa$'
+    set x2tics
+    unset ytics
+    plot cmd(2024,8,3,f)   using 7:9 with lines  ls 2 title '03 Aug',\
+         cmd(2024,8,3,g)   using 7:9 with lines  ls 2 dt 2 title '$\kappa$'
 
-  set ylabel 'z [m]'
-  unset ytics
 
-  plot cmd(2024,9,6,f)   using 7:9 with lines  ls 4 title '06 Sep',\
-       cmd(2024,9,6,g)   using 7:9 with lines  ls 4 dt 2 title '$\kappa$'
+    unset x2tics
+    plot cmd(2024,8,21,f)  using 7:9 with lines  ls 3  title '21 Aug',\
+         cmd(2024,8,21,g)  using 7:9 with lines  ls 3 dt 2 title '$\kappa$'
 
-  unset ytics
-  set ylabel ''
-  plot cmd(2024,9,21,f)  using 7:9 with lines  ls 5 title '21 Sep',\
-       cmd(2024,9,21,g)  using 7:9 with lines  ls 5 dt 2 title '$\kappa$'
+    set ylabel 'z [m]'
+    unset ytics
 
-  set y2tics
-  plot cmd(2024,10,6,f)  using 7:9 with lines  ls 6 title '06 Oct',\
-       cmd(2024,10,6,g)  using 7:9 with lines  ls 6 dt 2 title '$\kappa$'
+    plot cmd(2024,9,6,f)   using 7:9 with lines  ls 4 title '06 Sep',\
+         cmd(2024,9,6,g)   using 7:9 with lines  ls 4 dt 2 title '$\kappa$'
 
-  set xtics nomirror
-  set ytics nomirror
-  unset y2tics
-  plot cmd(2024,10,21,f) using 7:9 with lines  ls 7 title '21 Nov',\
-       cmd(2024,10,21,g) using 7:9 with lines  ls 7 dt 2 title '$\kappa$'
+    unset ytics
+    set ylabel ''
+    plot cmd(2024,9,21,f)  using 7:9 with lines  ls 5 title '21 Sep',\
+         cmd(2024,9,21,g)  using 7:9 with lines  ls 5 dt 2 title '$\kappa$'
 
-  set xlabel 'x [m]'
-  unset ytics
-  unset xtics
-  plot cmd(2024,11,9,f)  using 7:9 with lines  ls 8 title '11 Nov',\
-       cmd(2024,11,9,g)  using 7:9 with lines  ls 8 dt 2 title '$\kappa$'
+    set y2tics
+    plot cmd(2024,10,6,f)  using 7:9 with lines  ls 6 title '06 Oct',\
+         cmd(2024,10,6,g)  using 7:9 with lines  ls 6 dt 2 title '$\kappa$'
 
-  set xlabel ''
-  set xtics nomirror
-  plot cmd(2024,12,21,f) using 7:9 with lines  ls -1 title '21 Dec',\
-       cmd(2024,12,21,g) using 7:9 with lines  ls 0 dt 2 title '$\kappa$'
+    set xtics nomirror
+    set ytics nomirror
+    unset y2tics
+    plot cmd(2024,10,21,f) using 7:9 with lines  ls 7 title '21 Nov',\
+         cmd(2024,10,21,g) using 7:9 with lines  ls 7 dt 2 title '$\kappa$'
 
-  unset multiplot
+    set xlabel 'x [m]'
+    unset ytics
+    unset xtics
+    plot cmd(2024,11,9,f)  using 7:9 with lines  ls 8 title '11 Nov',\
+         cmd(2024,11,9,g)  using 7:9 with lines  ls 8 dt 2 title '$\kappa$'
+
+    set xlabel ''
+    set xtics nomirror
+    plot cmd(2024,12,21,f) using 7:9 with lines  ls -1 title '21 Dec',\
+         cmd(2024,12,21,g) using 7:9 with lines  ls 0 dt 2 title '$\kappa$'
+
+    unset multiplot
 #+end_src
 
 #+RESULTS:
 [[file:./fig/multiplot4.png]]
 
+** Ejemplo
 
 #+begin_src gnuplot :file "./fig/multiplot5.png" :results file graphics :exports both
   reset
@@ -1893,6 +1971,92 @@ unset multiplot
 #+RESULTS:
 [[file:./fig/multiplot5.png]]
 
+* Dibujar en gnuplot
+
+set object <id> rectangle from <x1>,<y1> to <x2>,<y2>
+set object <id> ellipse at <x1>,<y1> size <r1>,<r2>
+
+
+#+begin_src gnuplot :file "./fig/draft.png" :results file graphics :exports both
+reset
+set size square
+
+set xrange [-1.1:1.1]
+set yrange [-1.1:1.1]
+set grid
+
+set xzeroaxis lt 1 lc 8 lw 2
+set yzeroaxis lt 1 lc 8 lw 2
+
+set object 1 rectangle from -1,-1 to 1,1
+set object 1 front lw 1 fillcolor rgb "#0000ff" fillstyle pattern 4
+
+set object 2 ellipse at 0,0 size 2,2
+set object 2 front lw 1 fillstyle transparent solid 0.1 fillcolor "red"
+
+x=0.4
+f(x)=sqrt(1-x**2)
+
+set arrow from 0,0 to x,f(x) lw 3 lc "blue" head  # Flecha con punta
+set arrow from x,0 to x,f(x) lw 3 dashtype 2 lc "blue" nohead 
+
+set label "a" at x/2,-0.05
+set label "b" at x+0.05,f(x)/2
+set label '$c=\sqrt{a^2 + b^2 }$' at 0.25,-0.25
+
+plot NaN notitle
+#+end_src
+
+#+RESULTS:
+[[file:./fig/draft.png]]
+
+
+
+#+begin_src gnuplot :file "./fig/draft1.png" :results file graphics :exports both
+reset
+load 'spectral.pal'
+set datafile columnheader
+set key left
+#set size ratio -1
+set xlabel 'x [m]'
+set ylabel 'z [m]'
+
+set format y "%.1f"
+set format x "%.1f"
+
+#set format y ""
+#set format x ""
+
+#set format x "%.3t"#; set ytic(12345)
+
+f='./data/driftReal.dat'
+condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
+action=sprintf(" print ")
+cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
+
+#set xtics rotate by 90 right
+#set xrange [-2.0:-0.2]
+#set yrange [-1.2:1.0]
+set grid
+
+#set title "Errores de deriva del 21 de Junio"
+
+
+set label '$\omega=0^\circ$' at  8.32, 5.2362
+set label '$\omega=30^\circ$' at 8.48, 5.6018
+
+
+set object circle at first  8.2826, 5.2362 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
+set object circle at first 8.4402, 5.6018 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
+
+plot cmd(2024,9,30,f) using 8:10 with lines ls 1  title ''
+#+end_src
+
+#+RESULTS:
+[[file:./fig/draft1.png]]
+
+
+
 
 * Gráficas en 3D
 
@@ -1987,93 +2151,6 @@ unset multiplot
 
 #+RESULTS:
 [[file:./fig/spotCon.png]]
-
-
-* Dibujar en gnuplot
-
-
-
-set object <id> rectangle from <x1>,<y1> to <x2>,<y2>
-set object <id> ellipse at <x1>,<y1> size <r1>,<r2>
-
-
-#+begin_src gnuplot :file "./fig/draft.png" :results file graphics :exports both
-reset
-set size square
-
-set xrange [-1.1:1.1]
-set yrange [-1.1:1.1]
-set grid
-
-set xzeroaxis lt 1 lc 8 lw 2
-set yzeroaxis lt 1 lc 8 lw 2
-
-set object 1 rectangle from -1,-1 to 1,1
-set object 1 front lw 1 fillcolor rgb "#0000ff" fillstyle pattern 4
-
-set object 2 ellipse at 0,0 size 2,2
-set object 2 front lw 1 fillstyle transparent solid 0.1 fillcolor "red"
-
-x=0.4
-f(x)=sqrt(1-x**2)
-
-set arrow from 0,0 to x,f(x) lw 3 lc "blue" head  # Flecha con punta
-set arrow from x,0 to x,f(x) lw 3 dashtype 2 lc "blue" nohead 
-
-set label "a" at x/2,-0.05
-set label "b" at x+0.05,f(x)/2
-set label '$c=\sqrt{a^2 + b^2 }$' at 0.25,-0.25
-
-plot NaN notitle
-#+end_src
-
-#+RESULTS:
-[[file:./fig/draft.png]]
-
-
-
-#+begin_src gnuplot :file "./fig/draft1.png" :results file graphics :exports both
-reset
-load 'spectral.pal'
-set datafile columnheader
-set key left
-#set size ratio -1
-set xlabel 'x [m]'
-set ylabel 'z [m]'
-
-set format y "%.1f"
-set format x "%.1f"
-
-#set format y ""
-#set format x ""
-
-#set format x "%.3t"#; set ytic(12345)
-
-f='./data/driftReal.dat'
-condition(y,m,d)=sprintf('/%d-%.2d-%.2d/', y,m,d)
-action=sprintf(" print ")
-cmd(y,m,d, file)= sprintf("<awk '%s {%s}' %s", condition(y,m,d), action, file)
-
-#set xtics rotate by 90 right
-#set xrange [-2.0:-0.2]
-#set yrange [-1.2:1.0]
-set grid
-
-#set title "Errores de deriva del 21 de Junio"
-
-
-set label '$\omega=0^\circ$' at  8.32, 5.2362
-set label '$\omega=30^\circ$' at 8.48, 5.6018
-
-
-set object circle at first  8.2826, 5.2362 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
-set object circle at first 8.4402, 5.6018 radius char 0.5 fillcolor rgb 'red' fillstyle solid noborder
-
-plot cmd(2024,9,30,f) using 8:10 with lines ls 1  title ''
-#+end_src
-
-#+RESULTS:
-[[file:./fig/draft1.png]]
 
 
 * Animación
